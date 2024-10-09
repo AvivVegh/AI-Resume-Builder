@@ -9,10 +9,6 @@ const COOKIE_TOKEN = 'res-access-token';
 export class AppService {
   constructor(private configService: ConfigService) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   getRedirectUrl(): string {
     return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&redirect_uri=${this.configService.get(
       'auth.linkedin.callback_url',
@@ -77,9 +73,9 @@ export class AppService {
     return {
       sameSite: 'lax',
       expires: date,
-      httpOnly: true,
+      httpOnly: false,
       domain: this.configService.get('http.host'),
-      secure: true,
+      secure: false,
     };
   }
 }

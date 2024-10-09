@@ -17,6 +17,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // TODO: implement auth
+
   return (
     <html lang="en">
       <body

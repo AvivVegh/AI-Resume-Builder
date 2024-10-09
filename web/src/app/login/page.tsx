@@ -1,6 +1,18 @@
 "use client";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const cookie = getCookie("res-access-token");
+    if (cookie) {
+      router.push("/home");
+    }
+  }, []);
+
   const onSigninClick = () => {
     location.href = "http://localhost:3002/auth/linkedin";
   };
