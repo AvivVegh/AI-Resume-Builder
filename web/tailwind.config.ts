@@ -9,7 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        title: ["open-sans", "sans-serif"],
+        title: [
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Monaco",
+          "Consolas",
+          "Liberation Mono",
+          "Courier New",
+          "monospace",
+        ],
       },
       colors: {
         background: "var(--background)",

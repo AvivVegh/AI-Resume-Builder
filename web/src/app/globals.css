@@ -5,7 +5,6 @@
 :root {
   --background: #eafdff;
   --foreground: #171717;
-  font-family: "font-mono";
 }
 
 @media (prefers-color-scheme: dark) {
