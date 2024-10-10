@@ -6,6 +6,11 @@ import { Response } from 'express';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get('profile')
+  async profile() {
+    return await this.appService.getProfile();
+  }
+
   @Get('auth/linkedin')
   loginWithLinkedin(@Res() res) {
     res.redirect(this.appService.getRedirectUrl());

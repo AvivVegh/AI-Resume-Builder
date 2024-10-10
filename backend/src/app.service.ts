@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { CookieOptions, Response } from 'express';
+import { LinkedInProfileScraper } from 'linkedin-profile-scraper';
 
 const COOKIE_TOKEN = 'res-access-token';
 
@@ -10,9 +11,13 @@ export class AppService {
   constructor(private configService: ConfigService) {}
 
   getRedirectUrl(): string {
+    const scopes = ['profile', 'openid', 'email', 'w_member_social'].join(
+      '%20',
+    );
+
     return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&redirect_uri=${this.configService.get(
       'auth.linkedin.callback_url',
-    )}&scope=profile%20openid%20email%20w_member_social&client_id=${this.configService.get(
+    )}&scope=${scopes}&client_id=${this.configService.get(
       'auth.linkedin.client_id',
     )}`;
   }
@@ -52,6 +57,23 @@ export class AppService {
       console.log(e);
       return null;
     }
+  }
+
+  async getProfile() {
+    console.log('getProfile');
+    const accessToken = '';
+    const scraper = new LinkedInProfileScraper({
+      sessionCookieValue: accessToken,
+      keepAlive: false,
+    });
+
+    await scraper.setup();
+
+    const result = await scraper.run('https://www.linkedin.com/in/aviv-vegh/');
+
+    console.log(result);
+
+    return result;
   }
 
   saveAccessTokenInCookie({

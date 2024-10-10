@@ -1,0 +1,21 @@
+services:
+  # web:
+  #   container_name: web
+  #   build:
+  #     context: ./client/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./client/:/usr/src/app # mount local working directory for live reload
+  #     - /usr/src/app/node_modules # mount node_modules for caching
+  #   environment:
+  #     - NEXT_PUBLIC_HEALTH_CHECK_URL=TODO
+  #     - NEXT_PUBLIC_DOC_ANALYSIS_URL=TODO
+  server:
+    container_name: backend
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3000
