@@ -1,19 +1,25 @@
 "use client";
 
 import { Form, Input, Modal } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [modalText, setModalText] = useState("Content of the modal");
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    setOpen(true);
+  }, []);
 
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-  const handleOk = (values: any) => {
+  const handleOk = async () => {
+    const values = await form.validateFields();
+
     setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
@@ -31,24 +37,33 @@ export default function HomePage() {
         <Modal
           className=" top-1/3"
           title="Title"
-          // style={{ top: 100 }}
           open={open}
           onOk={handleOk}
           confirmLoading={confirmLoading}
           onCancel={handleCancel}
           animation={false}
         >
-          {/* <p>{modalText}</p> */}
           <Form form={form} onFinish={handleOk}>
             <Form.Item
-              name="linkedin profile url"
+              name="linkedinProfileUrl"
+              rules={[
+                {
+                  required: true,
+                  message: "Please put your linkedin profile url",
+                },
+              ]}
+            >
+              <Input placeholder="linkedin profile url" />
+            </Form.Item>
+            <Form.Item
+              name="linkedinProfileUrl2"
               rules={[
                 {
                   required: true,
                 },
               ]}
             >
-              <Input placeholder="linkedin profile url" />
+              <Input placeholder="linkedin profile url2" />
             </Form.Item>
           </Form>
         </Modal>
