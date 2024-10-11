@@ -1,0 +1,15 @@
+http:
+  host: 'localhost'
+  port: 3000
+
+auth:
+  linkedin:
+    client_id: ''
+    client_secret: ''
+    callback_url: ''
+  google:
+    client_id: ''
+    client_secret: ''
+    callback_url: ''
+  token_expiration:
+    refresh: 2419200

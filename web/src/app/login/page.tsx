@@ -14,7 +14,7 @@ export default function LoginPage() {
   }, []);
 
   const onSigninClick = () => {
-    location.href = "http://localhost:3002/auth/linkedin";
+    location.href = "http://localhost:3002/auth/google";
   };
 
   return (

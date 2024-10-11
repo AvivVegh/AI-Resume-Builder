@@ -8,7 +8,7 @@ const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
 const COOKIE_ID_TOKEN = 'res-id-token';
 
 @Injectable()
-export class AppService {
+export class AuthService {
   constructor(private configService: ConfigService) {}
 
   getGoogleRedirectUrl(): string {
