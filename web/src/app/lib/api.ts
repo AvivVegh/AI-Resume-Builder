@@ -17,4 +17,9 @@ export const createResume = async ({
   return result.data;
 };
 
+export const getResumeText = async ({}: {}) => {
+  const result = await axios.get(`${BASE_URL}/api/resume/text`);
+  return result.data;
+};
+
 export const authUrl = `${BASE_URL}/auth/google`;
