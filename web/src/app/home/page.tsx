@@ -1,7 +1,9 @@
 "use client";
 
-import { Form, Input, Modal } from "antd";
+import { Button, Form } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
+import { createResume } from "../lib/api";
 
 export default function HomePage() {
   const [open, setOpen] = useState(false);
@@ -27,14 +29,73 @@ export default function HomePage() {
       setConfirmLoading(false);
     }, 2000);
   };
+
+  const createResumeHandler = async () => {
+    const values = await form.validateFields();
+
+    const resume = await createResume({
+      jobDescription: values.jobDescription,
+      resume: values.resume,
+    });
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div>
-        <h1 className="font-title text-3xl font-medium text-center">
-          Hello world
+    <div className="bg-gray-100 m-20">
+      <div className="flex-row h-full	w-full">
+        <h1 className="font-title text-3xl font-medium text-center mt-20 ">
+          Let's create your personalized resume!
         </h1>
 
-        <Modal
+        <Form form={form} onFinish={createResumeHandler}>
+          <div className="flex justify-center items-center w-full">
+            <Button
+              className="font-title text-3xl font-medium text-center mt-10 p-5 bg-violet-900	text-white"
+              onClick={createResumeHandler}
+            >
+              Create
+            </Button>
+          </div>
+          <div className="flex justify-center items-center h-full w-full mt-10">
+            <div className="flex gap-x-3 ">
+              <Form.Item
+                name="jobDescription"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please add your job description",
+                  },
+                ]}
+              >
+                <TextArea
+                  style={{ resize: "none" }}
+                  className="font-medium font-mono"
+                  cols={70}
+                  rows={20}
+                  placeholder="please add your job description..."
+                />
+              </Form.Item>
+              <Form.Item
+                name="resume"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please paste your resume",
+                  },
+                ]}
+              >
+                <TextArea
+                  style={{ resize: "none" }}
+                  className="font-medium font-mono"
+                  cols={70}
+                  rows={20}
+                  placeholder="please paste your resume..."
+                />
+              </Form.Item>
+            </div>
+          </div>
+        </Form>
+
+        {/* <Modal
           className=" top-1/3"
           title="Title"
           open={open}
@@ -66,7 +127,7 @@ export default function HomePage() {
               <Input placeholder="linkedin profile url2" />
             </Form.Item>
           </Form>
-        </Modal>
+        </Modal> */}
       </div>
     </div>
   );

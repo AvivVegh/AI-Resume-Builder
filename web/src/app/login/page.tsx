@@ -2,6 +2,7 @@
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { authUrl } from "../lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function LoginPage() {
   }, []);
 
   const onSigninClick = () => {
-    location.href = "http://localhost:3002/auth/google";
+    location.href = authUrl;
   };
 
   return (
