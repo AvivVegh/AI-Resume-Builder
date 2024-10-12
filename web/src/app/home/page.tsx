@@ -3,7 +3,7 @@
 import { Button, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
-import { createResume } from "../lib/api";
+import { createResume } from "../util/api";
 
 export default function HomePage() {
   const [form] = Form.useForm();

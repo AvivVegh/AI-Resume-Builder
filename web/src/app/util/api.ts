@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const BASE_URL = process.env.NEXT_API_URL;
+import { BASE_URL } from "./constants";
 
 export const createResume = async ({
   jobDescription,

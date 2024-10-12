@@ -44,6 +44,11 @@
 
 3. Create a `.env` file in the `web` directory with the necessary environment variables.
 
+   ```
+   NEXT_PUBLIC_GITUHB_PROJECT_URL=
+   NEXT_PUBLIC_API_URL=https://github.com/AvivVegh/AI-Resume-Builder
+   ```
+
 4. Start the web server:
    ```sh
    npm run dev

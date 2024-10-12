@@ -2,7 +2,7 @@
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { authUrl } from "../lib/api";
+import { authUrl } from "../util/api";
 
 export default function LoginPage() {
   const router = useRouter();

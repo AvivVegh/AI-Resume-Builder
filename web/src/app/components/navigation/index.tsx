@@ -2,10 +2,11 @@
 import React from "react";
 import Link from "next/link";
 import { GithubOutlined } from "@ant-design/icons";
+import { GITHUB_URL } from "@/app/util/constants";
 
 const Navbar = () => {
   const onGithubClick = () => {
-    window.open("https://github.com");
+    window.open(GITHUB_URL);
   };
   return (
     <div className="w-full h-10 bg-black sticky top-0">
