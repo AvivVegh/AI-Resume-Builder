@@ -5,35 +5,7 @@ on:
     branches:
       - main
 jobs:
-  version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: "Automated Version Bump backend"
-        uses: "phips28/gh-action-bump-version@master"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR: "backend"
-        with:
-          bump-policy: "ignore"
-          version-type: "minor"
-
-      - name: "Automated Version Bump web"
-        uses: "phips28/gh-action-bump-version@master"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR: "web"
-        with:
-          bump-policy: "ignore"
-          skip-tag: "true"
-          version-type: "minor"
-
   services:
-    needs: version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
