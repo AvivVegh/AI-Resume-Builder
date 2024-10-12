@@ -52,8 +52,6 @@ export class AuthService {
         },
       );
 
-      const { access_token, id_token } = result.data;
-
       this.saveTokensInCookie({
         accessToken: result.data.access_token,
         idToken: result.data.id_token,
