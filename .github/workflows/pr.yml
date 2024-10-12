@@ -21,11 +21,11 @@ jobs:
         with:
           bump-policy: "ignore"
           version-type: "minor"
-      - name: "Automated Version Bump frontend"
+      - name: "Automated Version Bump web"
         uses: "phips28/gh-action-bump-version@master"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR: "frontend"
+          PACKAGEJSON_DIR: "web"
         with:
           bump-policy: "ignore"
           skip-tag: "true"
@@ -57,6 +57,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: web
 
       - name: lint
         run: npm run lint
+        working-directory: web
