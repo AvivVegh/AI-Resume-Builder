@@ -2,7 +2,6 @@
 
 import { Button, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { useEffect, useState } from "react";
 import { createResume } from "../util/api";
 
 export default function HomePage() {
@@ -15,13 +14,15 @@ export default function HomePage() {
       jobDescription: values.jobDescription,
       resume: values.resume,
     });
+
+    console.log(resume);
   };
 
   return (
     <div className="bg-gray-100 m-20">
       <div className="flex-row h-full	w-full">
         <h1 className="font-title text-3xl font-medium text-center mt-20 ">
-          Let's create your personalized resume!
+          Let`s create your personalized resume!
         </h1>
 
         <Form form={form} onFinish={createResumeHandler}>
