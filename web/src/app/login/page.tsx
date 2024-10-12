@@ -3,6 +3,7 @@ import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { authUrl } from "../util/api";
+import { GooglePlusOutlined } from "@ant-design/icons";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,15 +32,11 @@ export default function LoginPage() {
         </p>
         <div className="flex flex-row justify-center items-center mt-5">
           <div
-            className="flex flex-wrap border-2 p-1 bg-white hover:bg-sky-700 cursor-pointer"
+            className="flex flex-wrap border-2 p-1 bg-white hover:bg-red-600 cursor-pointer"
             onClick={onSigninClick}
           >
-            <p className="font-medium text-l mr-3">Sign in with</p>
-            <img
-              className="w-6 h-6"
-              src="/images/linkedin.png"
-              alt="LinkedIn"
-            />
+            <p className="font-medium text-l mr-1">Sign in with</p>
+            <GooglePlusOutlined className="w-6 h-6" />
           </div>
         </div>
       </div>
