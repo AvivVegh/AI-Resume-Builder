@@ -8,7 +8,7 @@ export const createResume = async ({
   jobDescription: string;
   resume: string;
 }) => {
-  const result = await axios.post(`${BASE_URL}/api/resume`, {
+  const result = await axios.post(`${BASE_URL}/resume`, {
     jobDescription,
     resume,
   });
@@ -17,7 +17,7 @@ export const createResume = async ({
 };
 
 export const getResumeText = async () => {
-  const result = await axios.get(`${BASE_URL}/api/resume/text`);
+  const result = await axios.get(`${BASE_URL}/resume/text`);
   return result.data;
 };
 

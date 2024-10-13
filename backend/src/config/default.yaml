@@ -13,3 +13,5 @@ auth:
     callback_url: ''
   token_expiration:
     refresh: 2419200
+client:
+  url: ''

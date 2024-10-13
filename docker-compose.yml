@@ -12,10 +12,23 @@ services:
   #   environment:
   #     - NEXT_PUBLIC_HEALTH_CHECK_URL=TODO
   #     - NEXT_PUBLIC_DOC_ANALYSIS_URL=TODO
-  server:
-    container_name: backend
-    build:
-      context: ./backend/
-      dockerfile: Dockerfile
+  # server:
+  #   container_name: backend
+  #   build:
+  #     context: ./backend/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3001:3000
+  postgres:
+    image: postgres:13
+    container_name: postgres_db
     ports:
-      - 3001:3000
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data: {}

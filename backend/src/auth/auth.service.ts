@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { CookieOptions, Response } from 'express';
 
-const COOKIE_ACCESS_TOKEN = 'res-access-token';
-const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
-const COOKIE_ID_TOKEN = 'res-id-token';
+export const COOKIE_ACCESS_TOKEN = 'res-access-token';
+export const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
+export const COOKIE_ID_TOKEN = 'res-id-token';
+export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,13 @@ export class AuthService {
     )}&redirect_uri=${this.configService.get(
       'auth.google.callback_url',
     )}&response_type=code&scope=profile email openid&prompt=consent&access_type=offline`;
+  }
+
+  logout(res: Response) {
+    res.clearCookie(COOKIE_ACCESS_TOKEN);
+    res.clearCookie(COOKIE_REFRESH_TOKEN);
+    res.clearCookie(COOKIE_ID_TOKEN);
+    res.clearCookie(COOKIE_IS_AUTHENTICATED);
   }
 
   async gAccessToken({
@@ -80,7 +88,18 @@ export class AuthService {
     idToken: string;
     expiration: number;
   }) {
-    const cookieSettings = this.cookieSettings(expiration);
+    const cookieSettings = this.cookieSettings({
+      exp: expiration,
+      secure: false,
+    });
+
+    const secureCookieSettings = this.cookieSettings({
+      exp: expiration,
+      secure: true,
+    });
+
+    res.cookie(COOKIE_IS_AUTHENTICATED, 'true', cookieSettings);
+
     if (refreshToken) {
       res.cookie(
         COOKIE_REFRESH_TOKEN,
@@ -90,21 +109,29 @@ export class AuthService {
         ),
       );
     }
+
     if (idToken) {
-      res.cookie(COOKIE_ID_TOKEN, idToken, cookieSettings);
+      res.cookie(COOKIE_ID_TOKEN, idToken, secureCookieSettings);
     }
-    res.cookie(COOKIE_ACCESS_TOKEN, accessToken, cookieSettings);
+
+    res.cookie(COOKIE_ACCESS_TOKEN, accessToken, secureCookieSettings);
   }
 
-  cookieSettings(exp: number = 0): CookieOptions {
+  cookieSettings({
+    secure,
+    exp = 0,
+  }: {
+    exp: number;
+    secure: boolean;
+  }): CookieOptions {
     const date = new Date();
     date.setTime(date.getTime() + exp * 1000);
     return {
       sameSite: 'lax',
       expires: date,
-      httpOnly: true,
+      httpOnly: secure,
       domain: this.configService.get('http.host'),
-      secure: true,
+      secure: secure,
     };
   }
 }

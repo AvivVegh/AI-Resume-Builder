@@ -1,26 +1,39 @@
 import { Controller, Get, Request, Res } from '@nestjs/common';
 
 import { Response } from 'express';
-import { AuthService } from './auth.service';
+import {
+  AuthService,
+  COOKIE_ACCESS_TOKEN,
+  COOKIE_IS_AUTHENTICATED,
+  COOKIE_REFRESH_TOKEN,
+} from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  clientUrl: string;
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {
+    this.clientUrl = this.configService.get('client.url');
+  }
 
   @Get('google')
   async loginWithGoogle(@Res() res, @Request() req) {
     const cookies = req.cookies;
-    const refreshToken = cookies['res-access-token'];
-    const accessToken = cookies['res-access-token'];
+    const refreshToken = cookies[COOKIE_REFRESH_TOKEN];
+    const accessToken = cookies[COOKIE_ACCESS_TOKEN];
+    const isAuthenticated = cookies[COOKIE_IS_AUTHENTICATED];
 
-    if (accessToken) {
-      return res.redirect('http://localhost:3000');
+    if (isAuthenticated && accessToken) {
+      return res.redirect(this.clientUrl);
     }
 
-    if (refreshToken) {
+    if (isAuthenticated && refreshToken) {
       try {
         await this.authService.gAccessToken({ res, refreshToken });
-        res.redirect('http://localhost:3000');
+        res.redirect(this.clientUrl);
       } catch (e) {
         console.error(e, 'cannot refresh token');
       }
@@ -34,7 +47,12 @@ export class AuthController {
     const code = req.query.code;
     // TOOD: handle success and errors
     await this.authService.gAccessToken({ res, code });
+    res.redirect(this.clientUrl);
+  }
 
-    res.redirect('http://localhost:3000');
+  @Get('logout')
+  logout(@Res() res: Response) {
+    this.authService.logout(res);
+    res.redirect(this.clientUrl);
   }
 }

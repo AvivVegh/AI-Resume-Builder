@@ -1,6 +1,11 @@
+"use client";
+
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/navigation";
+import { useEffect } from "react";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,7 +23,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // TODO: implement auth
+  const router = useRouter();
+
+  useEffect(() => {
+    const cookie = getCookie("res-is-authenticated");
+    if (cookie) {
+      router.push("/home");
+    } else {
+      router.push("/login");
+    }
+  }, []);
 
   return (
     <html lang="en">

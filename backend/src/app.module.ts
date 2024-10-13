@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import configuration from './config/configuration';
+import { loadConfigModule } from './config/configuration';
 import { LinkedinModule } from './linkedin/linkedin.module';
+import { ResumeModule } from './resume/resume.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from './config/typeorm';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [configuration],
-    }),
+    loadConfigModule(),
+    TypeOrmModule.forRoot({ ...typeOrmConfig } as any),
     AuthModule,
     LinkedinModule,
+    ResumeModule,
   ],
 
   controllers: [AppController],
