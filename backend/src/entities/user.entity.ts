@@ -14,6 +14,15 @@ export class User {
   @Column({ default: true })
   deleted: boolean;
 
+  @Column()
+  email: string;
+
+  @Column({ name: 'provider_id' })
+  providerId: string;
+
+  @Column({ name: 'provider_type' })
+  providerType: string;
+
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',

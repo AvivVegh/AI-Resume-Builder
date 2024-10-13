@@ -7,6 +7,7 @@ import { LinkedinModule } from './linkedin/linkedin.module';
 import { ResumeModule } from './resume/resume.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { typeOrmConfig } from './config/typeorm';
     AuthModule,
     LinkedinModule,
     ResumeModule,
+    UserModule,
   ],
 
   controllers: [AppController],
