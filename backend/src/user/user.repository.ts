@@ -1,14 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { User as UserEntity } from '../entities/user.entity';
-import { loadConfig } from 'src/config/configuration';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserRepository {
   constructor(
     private readonly logger: Logger,
-    @InjectDataSource(loadConfig().database.databasea)
+    @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
 
@@ -44,6 +43,12 @@ export class UserRepository {
       .addSelect('firstName')
       .addSelect('lastName')
       .where('id = :id', { id });
+    return await query.getOne();
+  }
+
+  async getByEmail({ email }: { email: string }): Promise<UserEntity> {
+    const query = this.manager().createQueryBuilder(UserEntity, 'user');
+    query.where('*').where('email = :email', { email });
     return await query.getOne();
   }
 }

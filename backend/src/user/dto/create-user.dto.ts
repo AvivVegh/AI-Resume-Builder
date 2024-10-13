@@ -5,4 +5,10 @@ export class CreateUsersDto {
   firstName: string;
   @IsString()
   lastName: string;
+  @IsString()
+  email: string;
+  @IsString()
+  providerId: string;
+  @IsString()
+  providerType: string;
 }

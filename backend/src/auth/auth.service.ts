@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { CookieOptions, Response } from 'express';
+import { UserService } from 'src/user/user.service';
 
 export const COOKIE_ACCESS_TOKEN = 'res-access-token';
 export const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
@@ -10,7 +11,11 @@ export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 
 @Injectable()
 export class AuthService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private userService: UserService,
+    private logger: Logger,
+  ) {}
 
   getGoogleRedirectUrl(): string {
     return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.configService.get(
@@ -60,6 +65,19 @@ export class AuthService {
         },
       );
 
+      const userInfoResult = await axios.post(
+        `https://oauth2.googleapis.com/tokeninfo?id_token=${result.data.id_token}`,
+      );
+
+      const userInfo = userInfoResult.data;
+
+      await this.userService.createUser({
+        email: userInfo.email,
+        firstName: userInfo.given_name,
+        lastName: userInfo.family_name,
+        providerId: userInfo.sub,
+        providerType: 'google',
+      });
       this.saveTokensInCookie({
         accessToken: result.data.access_token,
         idToken: result.data.id_token,
