@@ -11,11 +11,14 @@ export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 
 @Injectable()
 export class AuthService {
+  baseUrl;
   constructor(
     private configService: ConfigService,
     private userService: UserService,
     private logger: Logger,
-  ) {}
+  ) {
+    baseUrl = this.configService.get('http.host');
+  }
 
   getGoogleRedirectUrl(): string {
     return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.configService.get(
@@ -148,7 +151,7 @@ export class AuthService {
       sameSite: 'lax',
       expires: date,
       httpOnly: secure,
-      domain: this.configService.get('http.host'),
+      domain: this.baseUrl,
       secure: secure,
     };
   }

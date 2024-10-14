@@ -21,4 +21,11 @@ export const getResumeText = async () => {
   return result.data;
 };
 
+export const getProfile = async () => {
+  const result = await axios.get(`${BASE_URL}/user/profile`, {
+    withCredentials: true,
+  });
+  return result.data;
+};
+
 export const authUrl = `${BASE_URL}/auth/google`;

@@ -2,10 +2,21 @@
 
 import { Button, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { createResume } from "../util/api";
+import { createResume, getProfile } from "../util/api";
+import { useEffect } from "react";
 
 export default function HomePage() {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    getProfile()
+      .then((profile) => {
+        console.log(profile);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const createResumeHandler = async () => {
     const values = await form.validateFields();

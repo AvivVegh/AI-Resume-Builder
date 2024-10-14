@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserRepository } from './user.repository';
-import { GetUserDto } from './dto/get-user.dto';
 import { CreateUsersDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable()
 export class UserService {
@@ -19,9 +19,16 @@ export class UserService {
     return users;
   }
 
-  async getUser(dto: GetUserDto): Promise<UserEntity> {
-    const user = this.userRepository.getById({ id: dto.id });
-    this.logger.log(user);
+  async getUser(token: string): Promise<UserEntity> {
+    const decoded = jwtDecode(token);
+
+    if (!decoded) {
+      this.logger.error('invalid token');
+      throw new Error('invalid token');
+    }
+
+    const email = decoded['email'];
+    const user = await this.userRepository.getByEmail({ email });
     return user;
   }
 
