@@ -3,15 +3,17 @@
 import { Button, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { createResume, getProfile } from "../util/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { User } from "../models/user";
 
 export default function HomePage() {
   const [form] = Form.useForm();
+  const [profile, setProfile] = useState<User>();
 
   useEffect(() => {
     getProfile()
       .then((profile) => {
-        console.log(profile);
+        setProfile(profile);
       })
       .catch((error) => {
         console.log(error);
@@ -33,6 +35,9 @@ export default function HomePage() {
     <div className="bg-gray-100 m-20">
       <div className="flex-row h-full	w-full">
         <h1 className="font-title text-3xl font-medium text-center mt-20 ">
+          Hi {profile?.firstName}
+        </h1>
+        <h1 className="font-title text-3xl font-medium text-center mt-5">
           Let`s create your personalized resume!
         </h1>
 
