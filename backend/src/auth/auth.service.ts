@@ -17,7 +17,7 @@ export class AuthService {
     private userService: UserService,
     private logger: Logger,
   ) {
-    baseUrl = this.configService.get('http.host');
+    this.baseUrl = this.configService.get('http.host');
   }
 
   getGoogleRedirectUrl(): string {
