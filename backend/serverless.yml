@@ -1,0 +1,16 @@
+service: serverless-example
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  main:
+    handler: dist/test/main.handler
+    events:
+      - http:
+          method: any
+          path: /{any+}
