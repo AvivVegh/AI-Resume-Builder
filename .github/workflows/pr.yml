@@ -4,8 +4,19 @@ on:
   push:
     branches:
       - main
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  STAGE: dev
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  # AWS_securityGroupId1: ${{ secrets.AWS_SECURITYGROUPID1 }}
+  # AWS_subnetId1: ${{ secrets.AWS_SUBNETID1 }}
+  # AWS_subnetId2: ${{ secrets.AWS_SUBNETID2 }}
+  S3_BUCKET: ${{ secrets.S3_BUCKET }}
+  AWS_DEFAULT_OUTPUT: json
+  AWS_AMPLIFY_APP_ID: ${{ secrets.AWS_AMPLIFY_APP_ID }}
 jobs:
-  services:
+  version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,13 +24,100 @@ jobs:
         with:
           node-version: 18
 
+      - name: "Automated Version Bump backend"
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR: "backend"
+        with:
+          bump-policy: "ignore"
+          version-type: "minor"
+      - name: "Automated Version Bump frontend"
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR: "frontend"
+        with:
+          bump-policy: "ignore"
+          skip-tag: "true"
+          version-type: "minor"
+  gateway:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Create environment variables
+        working-directory: backend
+        run: |
+          touch serverless.config.dev.yml
+          cp serverless.config.prod.yml serverless.config.dev.yml
+          cat serverless.config.dev.yml
+
       - name: Install dependencies
         run: npm ci
         working-directory: backend
 
-      - name: lint
+      - name: Config serverless
+        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
         working-directory: backend
-        run: npm run lint
+
+      - name: Deploy ApiGW
+        working-directory: backend/src/gateway
+        run: |
+          npx serverless deploy --stage $STAGE --verbose
+          npx serverless info --stage $STAGE --verbose | tee .slsinfo
+          ID="$(npx serverless info --stage $STAGE --verbose | tee .slsinfo | grep apiGatewayRestApiId | cut -d ":" -f2)"
+          if [ -n "$ID" ]; then
+              echo "not empty"
+              echo AM_APIGW_ID=$ID >> $GITHUB_ENV
+          else
+              echo "empty"
+          fi
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Add api gw id to ssm
+        run: |
+          if [ -n "$AM_APIGW_ID" ]; then
+              echo "Add api gw id to ssm"
+              STAGE_LOWERCASE=$(echo "$STAGE" | tr '[:upper:]' '[:lower:]')  # Convert to lowercase
+              PARAM_NAME="am_$STAGE_LOWERCASE"
+              aws ssm put-parameter --name "$PARAM_NAME" --value "$AM_APIGW_ID" --type String --overwrite
+          else
+              echo "nothing to add"
+          fi
+  services:
+    needs: gateway
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Create environment variables
+        working-directory: backend
+        run: |
+          touch serverless.config.dev.yml
+          cp serverless.config.prod.yml serverless.config.dev.yml
+          cat serverless.config.dev.yml
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: backend
+
+      - name: Deploy services
+        working-directory: ${{ matrix.dir }}
+        run: npx serverless deploy --stage $STAGE --verbose
 
   frontend:
     needs: services
@@ -30,10 +128,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm ci
-        working-directory: web
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: lint
-        run: npm run lint
-        working-directory: web
+      - name: Add env ssm
+        run: |
+          aws ssm put-parameter --name am_job_env --value dev --type String --overwrite
+
+      - name: Deploy to Amplify
+        run: ./frontend/scripts/amplify-deploy.sh $AWS_AMPLIFY_APP_ID main

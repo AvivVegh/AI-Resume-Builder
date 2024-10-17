@@ -9,7 +9,7 @@ provider:
 
 functions:
   main:
-    handler: dist/test/main.handler
+    handler: dist/main2.handler
     events:
       - http:
           method: any

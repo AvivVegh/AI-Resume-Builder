@@ -1,0 +1,16 @@
+region: ${env:AWS_REGION}
+timeout: 30
+runtime: nodejs20.x
+memorySize: 1280
+versionFunctions: false
+stage: ${env:STAGE}
+tracing:
+  lambda: true
+deploymentBucket: ${env:S3_BUCKET}
+# vpc:
+#   securityGroupIds:
+#     - ${env:AWS_securityGroupId1}
+#   subnetIds:
+#     - ${env:AWS_subnetId1}
+#     - ${env:AWS_subnetId2}
+

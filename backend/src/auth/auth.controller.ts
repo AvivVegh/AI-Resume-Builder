@@ -22,21 +22,25 @@ export class AuthController {
   @Get('google')
   async loginWithGoogle(@Res() res, @Request() req) {
     const cookies = req.cookies;
-    const refreshToken = cookies[COOKIE_REFRESH_TOKEN];
-    const accessToken = cookies[COOKIE_ACCESS_TOKEN];
-    const isAuthenticated = cookies[COOKIE_IS_AUTHENTICATED];
+    try {
+      const refreshToken = cookies[COOKIE_REFRESH_TOKEN];
+      const accessToken = cookies[COOKIE_ACCESS_TOKEN];
+      const isAuthenticated = cookies[COOKIE_IS_AUTHENTICATED];
 
-    if (isAuthenticated && accessToken) {
-      return res.redirect(this.clientUrl);
-    }
-
-    if (isAuthenticated && refreshToken) {
-      try {
-        await this.authService.gAccessToken({ res, refreshToken });
-        res.redirect(this.clientUrl);
-      } catch (e) {
-        console.error(e, 'cannot refresh token');
+      if (isAuthenticated && accessToken) {
+        return res.redirect(this.clientUrl);
       }
+
+      if (isAuthenticated && refreshToken) {
+        try {
+          await this.authService.gAccessToken({ res, refreshToken });
+          res.redirect(this.clientUrl);
+        } catch (e) {
+          console.error(e, 'cannot refresh token');
+        }
+      }
+    } catch (e) {
+      console.error(e, 'cannot get cookies');
     }
 
     res.redirect(this.authService.getGoogleRedirectUrl());

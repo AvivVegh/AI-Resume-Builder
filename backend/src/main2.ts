@@ -1,12 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import serverlessExpress from '@codegenie/serverless-express';
 import { Callback, Context, Handler } from 'aws-lambda';
-import { TestModule } from './test.module';
+
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 let server: Handler;
 
 async function bootstrap(): Promise<Handler> {
-  const app = await NestFactory.create(TestModule);
+  const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: function (origin, callback) {
+      callback(null, true);
+    },
+    preflightContinue: false,
+    credentials: true,
+  });
+
+  app.useGlobalPipes(new ValidationPipe());
+
   await app.init();
 
   const expressApp = app.getHttpAdapter().getInstance();
