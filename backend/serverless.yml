@@ -4,6 +4,16 @@ frameworkVersion: '3'
 plugins:
   - serverless-offline
   - serverless-prune-plugin
+  - serverless-webpack
+
+
+custom:
+  webpack:
+    includeModules:
+      forceExclude:
+        - aws-sdk
+        - typescript
+    webpackConfig: ./webpack.config.js
 
 provider:
   name: aws

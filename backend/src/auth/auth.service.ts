@@ -1,15 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { CookieOptions, Response } from 'express';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
+import { Logger } from '../lib/logger';
+import { ConfigService } from '../config/configuration';
 
 export const COOKIE_ACCESS_TOKEN = 'res-access-token';
 export const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
 export const COOKIE_ID_TOKEN = 'res-id-token';
 export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 
-@Injectable()
 export class AuthService {
   baseUrl;
   callbackUrl;
@@ -57,7 +56,7 @@ export class AuthService {
         redirect_uri: this.callbackUrl,
         client_id: this.clientId,
         client_secret: this.clientSecret,
-      };
+      } as any;
 
       if (code) {
         params['code'] = code;

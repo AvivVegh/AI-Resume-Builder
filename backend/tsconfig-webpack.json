@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "lib": ["es2021"],
+    "removeComments": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "module": "commonjs",
+    "target": "es2020",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "resolveJsonModule": true,
+    // "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  },
+  "include": ["./**/*.ts"],
+  "exclude": [
+    "node_modules/**/*",
+    ".serverless/**/*",
+    ".webpack/**/*",
+    ".build/**/*",
+    "dist/**/*",
+    "test/**/*"
+  ]
+}
