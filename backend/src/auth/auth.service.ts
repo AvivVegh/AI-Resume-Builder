@@ -12,20 +12,28 @@ export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 @Injectable()
 export class AuthService {
   baseUrl;
+  callbackUrl;
+  clientId;
+  clientSecret;
+  tokenExpiration;
   constructor(
     private configService: ConfigService,
     private userService: UserService,
     private logger: Logger,
   ) {
-    this.baseUrl = this.configService.get('http.host');
+    this.baseUrl = this.configService.get('http_host');
+    this.callbackUrl = `${this.configService.get(
+      'google_callback_base_url',
+    )}/${this.configService.get('google_callback_path')}`;
+    this.clientId = this.configService.get('google_client_id');
+    this.clientSecret = this.configService.get('google_client_secret');
+    this.tokenExpiration = this.configService.get('refresh_token_expiration');
   }
 
   getGoogleRedirectUrl(): string {
     return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.configService.get(
-      'auth.google.client_id',
-    )}&redirect_uri=${this.configService.get(
-      'auth.google.callback_url',
-    )}&response_type=code&scope=profile email openid&prompt=consent&access_type=offline`;
+      'google_client_id',
+    )}&redirect_uri=${this.callbackUrl}&response_type=code&scope=profile email openid&prompt=consent&access_type=offline`;
   }
 
   logout(res: Response) {
@@ -46,9 +54,9 @@ export class AuthService {
   }): Promise<any> {
     try {
       const params = {
-        redirect_uri: this.configService.get('auth.google.callback_url'),
-        client_id: this.configService.get('auth.google.client_id'),
-        client_secret: this.configService.get('auth.google.client_secret'),
+        redirect_uri: this.callbackUrl,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
       };
 
       if (code) {
@@ -125,9 +133,7 @@ export class AuthService {
       res.cookie(
         COOKIE_REFRESH_TOKEN,
         refreshToken,
-        this.cookieSettings(
-          this.configService.get('auth.token_expiration.refresh'),
-        ),
+        this.cookieSettings(this.tokenExpiration),
       );
     }
 

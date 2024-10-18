@@ -1,48 +1,47 @@
-name: Build and Deploy dev
+name: Build and Deploy prod
 
 on:
   push:
     branches:
       - main
 env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  STAGE: dev
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  # AWS_securityGroupId1: ${{ secrets.AWS_SECURITYGROUPID1 }}
-  # AWS_subnetId1: ${{ secrets.AWS_SUBNETID1 }}
-  # AWS_subnetId2: ${{ secrets.AWS_SUBNETID2 }}
-  S3_BUCKET: ${{ secrets.S3_BUCKET }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  STAGE: prod
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_HOST: ${{ secrets.DB_HOST }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
   AWS_DEFAULT_OUTPUT: json
-  AWS_AMPLIFY_APP_ID: ${{ secrets.AWS_AMPLIFY_APP_ID }}
 jobs:
-  version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
+  # version:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
 
-      - name: "Automated Version Bump backend"
-        uses: "phips28/gh-action-bump-version@master"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR: "backend"
-        with:
-          bump-policy: "ignore"
-          version-type: "minor"
-      - name: "Automated Version Bump frontend"
-        uses: "phips28/gh-action-bump-version@master"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR: "frontend"
-        with:
-          bump-policy: "ignore"
-          skip-tag: "true"
-          version-type: "minor"
+  #     - name: "Automated Version Bump backend"
+  #       uses: "phips28/gh-action-bump-version@master"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         PACKAGEJSON_DIR: "backend"
+  #       with:
+  #         bump-policy: "ignore"
+  #         version-type: "minor"
+  #     - name: "Automated Version Bump frontend"
+  #       uses: "phips28/gh-action-bump-version@master"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         PACKAGEJSON_DIR: "frontend"
+  #       with:
+  #         bump-policy: "ignore"
+  #         skip-tag: "true"
+  #         version-type: "minor"
+
   gateway:
-    needs: version
+    # needs: version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,12 +49,12 @@ jobs:
         with:
           node-version: 18
 
-      - name: Create environment variables
-        working-directory: backend
-        run: |
-          touch serverless.config.dev.yml
-          cp serverless.config.prod.yml serverless.config.dev.yml
-          cat serverless.config.dev.yml
+      # - name: Create environment variables
+      #   working-directory: backend
+      #   run: |
+      #     touch serverless.config.dev.yml
+      #     cp serverless.config.prod.yml serverless.config.dev.yml
+      #     cat serverless.config.dev.yml
 
       - name: Install dependencies
         run: npm ci
@@ -86,8 +85,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Add api gw id to ssm
         run: |
@@ -108,12 +107,26 @@ jobs:
         with:
           node-version: 18
 
-      - name: Create environment variables
+      # - name: Create environment variables
+      #   working-directory: backend
+      #   run: |
+      #     touch serverless.config.dev.yml
+      #     cp serverless.config.prod.yml serverless.config.dev.yml
+      #     cat serverless.config.dev.yml
+
+      - name: Create config file
         working-directory: backend
         run: |
-          touch serverless.config.dev.yml
-          cp serverless.config.prod.yml serverless.config.dev.yml
-          cat serverless.config.dev.yml
+          config=`cat config/default.yaml`
+          config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
+          config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
+          base_url=https://$API_GW_ID.execute-api.us-west-2.amazonaws.com/main
+          config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$base_url}
+          config=${config//CLIENT_URL_VAR/$CLIENT_URL}
+          config=${config//DB_HOST_VAR/$DB_HOST}
+          config=${config//DB_PASSPORT_VAR/$DB_PASSPORT}
+          touch config.yaml
+          echo "$config" > config.yaml
 
       - name: Install dependencies
         run: npm ci
@@ -140,8 +153,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Add env ssm
         run: |

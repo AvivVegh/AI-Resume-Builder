@@ -8,11 +8,11 @@ const config = loadConfig();
 
 export const typeOrmConfig = {
   type: 'postgres',
-  host: config.db.host,
-  port: config.db.port,
-  username: config.db.username,
-  password: config.db.password,
-  database: config.db.database,
+  host: config.db_host,
+  port: config.db_port,
+  username: config.db_username,
+  password: config.db_password,
+  database: config.db_database,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: false,

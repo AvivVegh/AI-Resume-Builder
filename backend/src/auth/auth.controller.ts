@@ -16,7 +16,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
   ) {
-    this.clientUrl = this.configService.get('client.url');
+    this.clientUrl = this.configService.get('client_url');
   }
 
   @Get('google')

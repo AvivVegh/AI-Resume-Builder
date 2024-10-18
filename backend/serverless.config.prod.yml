@@ -7,10 +7,11 @@ stage: ${env:STAGE}
 tracing:
   lambda: true
 deploymentBucket: ${env:S3_BUCKET}
-# vpc:
-#   securityGroupIds:
-#     - ${env:AWS_securityGroupId1}
-#   subnetIds:
-#     - ${env:AWS_subnetId1}
-#     - ${env:AWS_subnetId2}
-
+vpc:
+  securityGroupIds:
+    - ${env:AWS_SECURITY_GROUP_ID}
+  subnetIds:
+    - ${env:AWS_SUBNET_ID_1}
+    - ${env:AWS_SUBNET_ID_2}
+    - ${env:AWS_SUBNET_ID_3}
+    - ${env:AWS_SUBNET_ID_4}
