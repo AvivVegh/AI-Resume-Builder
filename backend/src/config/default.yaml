@@ -1,17 +1,20 @@
 http:
-  host: 'localhost'
+  host: 'temp'
   port: 3000
-
 auth:
-  linkedin:
-    client_id: ''
-    client_secret: ''
-    callback_url: ''
   google:
-    client_id: ''
-    client_secret: ''
-    callback_url: ''
+    client_id: 'temp'
+    client_secret: 'temp'
+    callback_url: 'temp'
+    callback_base_url: 'temp'
+    callback_path: '/auth/google/callback'
   token_expiration:
     refresh: 2419200
 client:
-  url: ''
+  url: 'temp'
+db:
+  host: 'temp'
+  port: 5432
+  database: 'temp'
+  username: 'temp'
+  password: 'temp'
