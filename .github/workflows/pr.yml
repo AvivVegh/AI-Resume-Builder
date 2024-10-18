@@ -56,6 +56,10 @@ jobs:
       #     cp serverless.config.prod.yml serverless.config.dev.yml
       #     cat serverless.config.dev.yml
 
+      - name: Install dependencies
+        run: npm ci
+        working-directory: backend
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -65,10 +69,6 @@ jobs:
 
       - name: Config serverless
         run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
-        working-directory: backend
-
-      - name: Install dependencies
-        run: npm ci
         working-directory: backend
 
       - name: Build
@@ -121,8 +121,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
+      - name: Install dependencies
+        run: npm ci
+        working-directory: backend
+
       - name: Config serverless
-        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --stage $STAGE
+        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
         working-directory: backend
 
       - name: Create config file
@@ -138,10 +142,6 @@ jobs:
           config=${config//DB_PASSPORT_VAR/$DB_PASSPORT}
           touch config.yaml
           echo "$config" > config.yaml
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: backend
 
       - name: Build
         run: npm run build
