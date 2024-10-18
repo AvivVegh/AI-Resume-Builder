@@ -13,6 +13,16 @@ env:
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
   AWS_DEFAULT_OUTPUT: json
   AWS_REGION: ${{ vars.AWS_REGION }}
+  CLIENT_URL: ${{ vars.CLIENT_URL }}
+  API_GW_ID: ${{ vars.API_GW_ID }}
+  S3_BUCKET: ${{ vars.S3_BUCKET }}
+  DB_HOST: ${{ vars.DB_HOST }}
+  AWS_SECURITY_GROUP_ID: ${{ vars.AWS_SECURITY_GROUP_ID }}
+  AWS_SUBNET_ID_1: ${{ vars.AWS_SUBNET_ID_1 }}
+  AWS_SUBNET_ID_2: ${{ vars.AWS_SUBNET_ID_2 }}
+  AWS_SUBNET_ID_3: ${{ vars.AWS_SUBNET_ID_3 }}
+  AWS_SUBNET_ID_4: ${{ vars.AWS_SUBNET_ID_4 }}
+
 jobs:
   # version:
   #   runs-on: ubuntu-latest
