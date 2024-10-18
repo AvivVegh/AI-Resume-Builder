@@ -56,16 +56,16 @@ jobs:
       #     cp serverless.config.prod.yml serverless.config.dev.yml
       #     cat serverless.config.dev.yml
 
-      # - name: Config serverless
-      #   run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --stage $STAGE
-      #   working-directory: backend
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Config serverless
+        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
+        working-directory: backend
 
       - name: Install dependencies
         run: npm ci
@@ -114,16 +114,16 @@ jobs:
       #     cp serverless.config.prod.yml serverless.config.dev.yml
       #     cat serverless.config.dev.yml
 
-      # - name: Config serverless
-      #   run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --stage $STAGE
-      #   working-directory: backend
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Config serverless
+        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --stage $STAGE
+        working-directory: backend
 
       - name: Create config file
         working-directory: backend
