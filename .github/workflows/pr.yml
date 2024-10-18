@@ -158,7 +158,7 @@ jobs:
         working-directory: backend
 
       - name: Deploy services
-        working-directory: ${{ matrix.dir }}
+        working-directory: backend
         run: npx serverless deploy --stage $STAGE --verbose
 
   frontend:
