@@ -7,15 +7,15 @@ plugins:
 
 provider:
   name: aws
-  runtime: ${file(../../serverless.config.${opt:stage}.yml):runtime}
-  memorySize: ${file(../../serverless.config.${opt:stage}.yml):memorySize}
-  region: ${file(../../serverless.config.${opt:stage}.yml):region}
+  runtime: ${file(serverless.config.${opt:stage}.yml):runtime}
+  memorySize: ${file(serverless.config.${opt:stage}.yml):memorySize}
+  region: ${file(serverless.config.${opt:stage}.yml):region}
   deploymentBucket:
-    name: ${file(../../serverless.config.${opt:stage}.yml):deploymentBucket}
+    name: ${file(serverless.config.${opt:stage}.yml):deploymentBucket}
     serverSideEncryption: AES256
-  vpc: ${file(../../serverless.config.${opt:stage}.yml):vpc}
-  environment: ${file(../../serverless.config.${opt:stage}.yml):environment}
-  stage: ${file(../../serverless.config.${opt:stage}.yml):stage}
+  vpc: ${file(serverless.config.${opt:stage}.yml):vpc}
+  environment: ${file(serverless.config.${opt:stage}.yml):environment}
+  stage: ${file(serverless.config.${opt:stage}.yml):stage}
   deploymentMethod: direct
   role:
     Fn::ImportValue: ${self:provider.stage}-gateway-LambdaExecutionIamRole
