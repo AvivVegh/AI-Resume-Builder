@@ -55,16 +55,16 @@ jobs:
       #     cp serverless.config.prod.yml serverless.config.dev.yml
       #     cat serverless.config.dev.yml
 
+      - name: Config serverless
+        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --stage $STAGE
+        working-directory: backend
+
       - name: Install dependencies
         run: npm ci
         working-directory: backend
 
       - name: Build
         run: npm run build
-        working-directory: backend
-
-      - name: Config serverless
-        run: sls config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
         working-directory: backend
 
       - name: Deploy ApiGW
@@ -113,6 +113,10 @@ jobs:
       #     cp serverless.config.prod.yml serverless.config.dev.yml
       #     cat serverless.config.dev.yml
 
+      - name: Config serverless
+        run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --stage $STAGE
+        working-directory: backend
+
       - name: Create config file
         working-directory: backend
         run: |
@@ -126,10 +130,6 @@ jobs:
           config=${config//DB_PASSPORT_VAR/$DB_PASSPORT}
           touch config.yaml
           echo "$config" > config.yaml
-
-      - name: Config serverless
-        run: sls config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
-        working-directory: backend
 
       - name: Install dependencies
         run: npm ci
