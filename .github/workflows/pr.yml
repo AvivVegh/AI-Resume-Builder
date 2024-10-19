@@ -145,7 +145,7 @@ jobs:
           config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$base_url}
           config=${config//CLIENT_URL_VAR/$CLIENT_URL}
           config=${config//DB_HOST_VAR/$DB_HOST}
-          config=${config//DB_PASSPORT_VAR/$DB_PASSPORT}
+          config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
           echo $config
           echo "$config" >> .env
 
