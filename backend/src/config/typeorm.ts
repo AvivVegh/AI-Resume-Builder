@@ -14,9 +14,6 @@ export const typeOrmConfig = {
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: false,
   synchronize: false,
-  extra: {
-    ssl: true,
-  },
 };
 
 export const connectionSource = new DataSource(
