@@ -152,9 +152,9 @@ jobs:
           config=${config//DB_PASSPORT_VAR/$DB_PASSPORT}
           echo "$config" >> .env
 
-      - name: Build
-        run: npm run build
-        working-directory: backend
+      # - name: Build
+      #   run: npm run build
+      #   working-directory: backend
 
       - name: Deploy services
         working-directory: backend

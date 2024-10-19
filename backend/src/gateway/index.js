@@ -1,4 +1,3 @@
-import { Callback, Context, Handler } from 'aws-lambda';
 import { JwtRsaVerifier } from 'aws-jwt-verify';
 import { decode } from 'jsonwebtoken';
 import { COOKIE_ID_TOKEN } from '../auth/auth.service';
@@ -17,7 +16,7 @@ const getDenyPolicy = () => {
   };
 };
 
-const getAllowPolicy = (resource: string) => {
+const getAllowPolicy = (resource) => {
   // IAM policy to invoke API.
   return {
     Version: '2012-10-17',
@@ -31,7 +30,7 @@ const getAllowPolicy = (resource: string) => {
   };
 };
 
-const generateAuthResponse = (principalId: any, resource: any) => {
+const generateAuthResponse = (principalId, resource) => {
   const policyDocument = getAllowPolicy(resource);
 
   return {
@@ -40,11 +39,7 @@ const generateAuthResponse = (principalId: any, resource: any) => {
   };
 };
 
-export const authorize: Handler = async (
-  event: any,
-  _context: Context,
-  callback: Callback,
-) => {
+export const authorize = async (event, _context, callback) => {
   const methodArn = event.methodArn;
   console.log('methodArn:', methodArn);
   const defaultDenyAllPolicy = getDenyPolicy();
@@ -57,7 +52,7 @@ export const authorize: Handler = async (
       callback(null, defaultDenyAllPolicy);
     }
 
-    const payload = decode(token) as any;
+    const payload = decode(token);
     console.log('payload:', payload);
 
     // Define IDP verifier parameters

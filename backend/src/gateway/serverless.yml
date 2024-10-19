@@ -1,14 +1,14 @@
 service: airb-gateway
 
-plugins:
-  - serverless-webpack
+# plugins:
+#   - serverless-webpack
 
-custom:
-  webpack:
-    webpackConfig: ../../webpack.config.js
-    packager: npm
-    includeModules:
-      packagePath: ../../package.json
+# custom:
+#   webpack:
+#     webpackConfig: ../../webpack.config.js
+#     packager: npm
+#     includeModules:
+#       packagePath: ../../package.json
 
 provider:
   name: aws
