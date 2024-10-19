@@ -14,7 +14,7 @@ provider:
   deploymentBucket:
     name: ${file(serverless.config.${opt:stage}.yml):deploymentBucket}
     serverSideEncryption: AES256
-  vpc: ${file(serverless.config.${opt:stage}.yml):vpc}
+  # vpc: ${file(serverless.config.${opt:stage}.yml):vpc}
   # environment: ${file(serverless.config.${opt:stage}.yml):environment}
   stage: ${file(serverless.config.${opt:stage}.yml):stage}
   deploymentMethod: direct
