@@ -5,10 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Controller('resume')
 export class ResumeController {
-  constructor(
-    private readonly resumeService: ResumeService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly resumeService: ResumeService) {}
 
   @Get('')
   async loginWithGoogle() {}

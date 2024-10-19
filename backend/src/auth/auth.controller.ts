@@ -7,15 +7,14 @@ import {
   COOKIE_IS_AUTHENTICATED,
   COOKIE_REFRESH_TOKEN,
 } from './auth.service';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '../config/configuration';
 
 @Controller('auth')
 export class AuthController {
+  configService = new ConfigService();
+
   clientUrl: string;
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {
+  constructor(private readonly authService: AuthService) {
     this.clientUrl = this.configService.get('client_url');
   }
 

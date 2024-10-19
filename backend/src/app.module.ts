@@ -2,15 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { loadConfigModule } from './config/configuration';
 import { ResumeModule } from './resume/resume.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm';
 import { UserModule } from './user/user.module';
+import { ConfigService } from './config/configuration';
 
 @Module({
   imports: [
-    loadConfigModule(),
     TypeOrmModule.forRoot({ ...typeOrmConfig } as any),
     AuthModule,
     ResumeModule,
@@ -18,6 +17,6 @@ import { UserModule } from './user/user.module';
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ConfigService],
 })
 export class AppModule {}

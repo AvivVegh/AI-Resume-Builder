@@ -1,18 +1,15 @@
-import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { loadConfig } from './configuration';
+import { ConfigService } from './configuration';
 
-dotenvConfig({ path: '.env' });
-
-const config = loadConfig();
+const configService = new ConfigService();
 
 export const typeOrmConfig = {
   type: 'postgres',
-  host: config.db_host,
-  port: config.db_port,
-  username: config.db_username,
-  password: config.db_password,
-  database: config.db_database,
+  host: configService.get('db_host'),
+  port: configService.get('db_port'),
+  username: configService.get('db_username'),
+  password: configService.get('db_password'),
+  database: configService.get('db_database'),
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: false,

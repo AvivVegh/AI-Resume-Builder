@@ -142,7 +142,7 @@ jobs:
       - name: Create config file
         working-directory: backend
         run: |
-          config=`cat src/config/default.yaml`
+          config=`cat .env.default`
           config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
           config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
           base_url=https://$API_GW_ID.execute-api.us-west-2.amazonaws.com/main
@@ -150,8 +150,7 @@ jobs:
           config=${config//CLIENT_URL_VAR/$CLIENT_URL}
           config=${config//DB_HOST_VAR/$DB_HOST}
           config=${config//DB_PASSPORT_VAR/$DB_PASSPORT}
-          touch src/config/config.yaml
-          echo "$config" > src/config/config.yaml
+          echo "$config" >> .env
 
       - name: Build
         run: npm run build

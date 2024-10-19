@@ -1,71 +1,18 @@
-import { ConfigModule } from '@nestjs/config';
-import { readFileSync } from 'fs';
-import * as yaml from 'js-yaml';
-import { join } from 'path';
-import { merge } from 'lodash';
+import { config as dotenvConfig } from 'dotenv';
 
-const YAML_CONFIG_FILENAME = 'config.yaml';
-export const defaultConfig = join(__dirname, YAML_CONFIG_FILENAME);
+dotenvConfig({ path: '.env' });
 
-function handleYAMLError(error: yaml.YAMLException, configFileName: string) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { message, ...restOfError } = error;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { buffer, snippet, ...restOfMark } = (restOfError as any).mark;
-  const errorWithoutPII = {
-    ...restOfError,
-    mark: restOfMark,
-    message: `bad yaml file: ${configFileName}`,
-  } as Error;
-  throw errorWithoutPII;
+export class ConfigService {
+  private readonly envConfig: Record<string, any>;
+
+  constructor() {
+    this.envConfig = process.env;
+  }
+
+  get(key: string): any {
+    console.log('key', key);
+    const value = this.envConfig[key];
+    console.log('value', value);
+    return value;
+  }
 }
-
-const loadConfigFile = (
-  configFileName = process.env.service_config || defaultConfig,
-) => {
-  try {
-    const yamlRes = yaml.load(readFileSync(configFileName, 'utf8'));
-    return yamlRes as Record<string, any>;
-  } catch (error) {
-    if (error instanceof yaml.YAMLException) {
-      handleYAMLError(error, configFileName);
-    } else {
-      throw error;
-    }
-  }
-};
-
-let config = null;
-
-export const loadConfig = (
-  configFileName = process.env.service_config || defaultConfig,
-) => {
-  if (!config) {
-    config =
-      configFileName === defaultConfig
-        ? loadConfigFile(configFileName)
-        : merge(loadConfigFile(defaultConfig), loadConfigFile(configFileName));
-  }
-
-  const configProxy = new Proxy(config, {
-    get: function (target, prop) {
-      return config[prop];
-    },
-  });
-  return configProxy;
-};
-
-export const loadConfigModule = (
-  configFileName = process.env.service_config || defaultConfig,
-) => {
-  return ConfigModule.forRoot({
-    load: [() => loadConfig(configFileName)],
-    isGlobal: true,
-  });
-};
-
-export default () => {
-  return yaml.load(
-    readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8'),
-  ) as Record<string, any>;
-};

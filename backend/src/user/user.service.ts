@@ -1,14 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { UserRepository } from './user.repository';
 import { CreateUsersDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { jwtDecode } from 'jwt-decode';
+import { ConfigService } from '../config/configuration';
 
 @Injectable()
 export class UserService {
   constructor(
-    private configService: ConfigService,
     private userRepository: UserRepository,
     private logger: Logger,
   ) {}

@@ -1,14 +1,14 @@
 service: airb-gateway
 
-# plugins:
-#   - serverless-webpack
+plugins:
+  - serverless-webpack
 
-# custom:
-#   webpack:
-#     webpackConfig: ../../webpack.config.js
-#     packager: yarn
-#     includeModules:
-#       packagePath: ../../package.json
+custom:
+  webpack:
+    webpackConfig: ../../webpack.config.js
+    packager: npm
+    includeModules:
+      packagePath: ../../package.json
 
 provider:
   name: aws
@@ -30,7 +30,7 @@ provider:
 functions:
   authorizer:
     timeout: 30
-    handler: dist/gateway/index.authorize
+    handler: index.authorize
 
 resources:
   Resources:

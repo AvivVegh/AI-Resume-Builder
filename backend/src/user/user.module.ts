@@ -1,14 +1,12 @@
 import { Logger, Module } from '@nestjs/common';
-
-import { loadConfigModule } from '../config/configuration';
 import { UserService } from './user.service';
 import { UserRepository } from './user.repository';
 import { UserController } from './user.controller';
+import { ConfigService } from '../config/configuration';
 
 @Module({
-  imports: [loadConfigModule()],
   controllers: [UserController],
-  providers: [UserService, UserRepository, Logger],
+  providers: [UserService, UserRepository, Logger, ConfigService],
   exports: [UserService],
 })
 export class UserModule {}

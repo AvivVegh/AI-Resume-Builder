@@ -1,15 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import configuration from '../config/configuration';
 import { ResumeController } from './resume.controller';
 import { ResumeService } from './resume.service';
+import { ConfigService } from '../config/configuration';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      load: [configuration],
-    }),
-  ],
+  imports: [],
   controllers: [ResumeController],
   providers: [ResumeService],
 })

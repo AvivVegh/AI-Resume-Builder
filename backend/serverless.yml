@@ -4,6 +4,7 @@ frameworkVersion: '3'
 plugins:
   - serverless-offline
   - serverless-prune-plugin
+  - serverless-webpack
 
 provider:
   name: aws
@@ -27,9 +28,13 @@ provider:
 
 package:
   patterns:
-    - ../../node_modules
+    - ./node_modules
 
 custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules: true
   authorizer:
     type: CUSTOM
     authorizerId:
@@ -50,7 +55,7 @@ custom:
 
 functions:
   main:
-    handler: dist/main2.handler
+    handler: src/main.handler
     events:
       - http:
           method: any
