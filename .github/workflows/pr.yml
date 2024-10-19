@@ -81,9 +81,9 @@ jobs:
         run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
         working-directory: backend
 
-      - name: Build
-        run: npm run build
-        working-directory: backend
+      # - name: Build
+      #   run: npm run build
+      #   working-directory: backend
 
       - name: Deploy ApiGW
         working-directory: backend/src/gateway
