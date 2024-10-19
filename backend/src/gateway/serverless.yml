@@ -92,16 +92,16 @@ resources:
           }
         RoleName: ${self:service}-${self:provider.stage}-IamRole
         ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/SecretsManagerReadWrite
           - arn:aws:iam::aws:policy/service-role/CloudWatchEventsBuiltInTargetExecutionAccess
           - arn:aws:iam::aws:policy/AmazonS3FullAccess
           - arn:aws:iam::aws:policy/CloudWatchFullAccess
           - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
           - arn:aws:iam::aws:policy/service-role/CloudWatchEventsInvocationAccess
-          - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
+          # - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
           - arn:aws:iam::aws:policy/CloudWatchEventsFullAccess
           - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+          - arn:aws:iam::aws:policy/RDSFullAccess
 
         # Authorizer
     ApiGatewayAuthorizer:
