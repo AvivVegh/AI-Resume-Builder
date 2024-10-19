@@ -178,7 +178,7 @@ jobs:
 
       - name: Add env ssm
         run: |
-          aws ssm put-parameter --name am_job_env --value dev --type String --overwrite
+          aws ssm put-parameter --name am_job_env --value prod --type String --overwrite
 
       - name: Deploy to Amplify
         run: ./frontend/scripts/amplify-deploy.sh $AWS_AMPLIFY_APP_ID main

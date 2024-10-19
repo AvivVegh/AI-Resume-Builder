@@ -11,10 +11,10 @@ applications:
             - export API_GW_ID=$(aws ssm get-parameter --name $PARAM_NAME --query Parameter.Value --output text --with-decryption)
             - export API_GW_ID=$(echo $API_GW_ID|xargs)
             - echo $API_GW_ID
-            - export NEXT_PUBLIC_API_URL_AM=https://$API_GW_ID.execute-api.us-west-1.amazonaws.com/$JOB_ENV
-            - echo $NEXT_PUBLIC_API_URL_AM
+            - export NEXT_PUBLIC_API_URL=https://$API_GW_ID.execute-api.us-west-2.amazonaws.com/$JOB_ENV
+            - echo $NEXT_PUBLIC_API_URL
             - env | grep -e NEXT_PUBLIC_ >> .env.production
-            - echo NEXT_PUBLIC_API_URL_AM=$NEXT_PUBLIC_API_URL_AM >> .env.production
+            - echo NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL >> .env.production
             - cat .env.production
             - if [ $JOB_ENV = 'dev' ]; then aws codeartifact login --tool npm --repository hsf-common --domain hsf --domain-owner 250203447304 --region us-west-2 --namespace @hsf; fi
             - if [ $JOB_ENV = 'prod' ]; then aws codeartifact login --tool npm --repository hsf-common --domain hsf --domain-owner 580472969326 --region us-west-2 --namespace @hsf; fi
