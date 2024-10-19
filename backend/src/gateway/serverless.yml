@@ -16,7 +16,7 @@ provider:
   deploymentBucket:
     name: ${file(../../serverless.config.${opt:stage}.yml):deploymentBucket}
     serverSideEncryption: AES256
-  # vpc: ${file(../../serverless.config.${opt:stage}.yml):vpc}
+  vpc: ${file(../../serverless.config.${opt:stage}.yml):vpc}
   timeout: ${file(../../serverless.config.${opt:stage}.yml):timeout}
   runtime: ${file(../../serverless.config.${opt:stage}.yml):runtime}
   memorySize: ${file(../../serverless.config.${opt:stage}.yml):memorySize}
