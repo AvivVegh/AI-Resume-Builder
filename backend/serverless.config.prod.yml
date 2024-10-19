@@ -13,5 +13,3 @@ vpc:
   subnetIds:
     - ${env:AWS_SUBNET_ID_1}
     - ${env:AWS_SUBNET_ID_2}
-    - ${env:AWS_SUBNET_ID_3}
-    - ${env:AWS_SUBNET_ID_4}
