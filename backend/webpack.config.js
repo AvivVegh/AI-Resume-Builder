@@ -3,8 +3,6 @@ const slsw = require('serverless-webpack');
 const isLocal = slsw.lib.webpack.isLocal;
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
-// require('dotenv').config({ path: './.env' });
-const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: isLocal ? 'development' : 'production',
@@ -63,10 +61,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
-    new Dotenv(),
-  ],
+  plugins: [new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ })],
   watchOptions: {
     ignored: /node_modules/,
   },

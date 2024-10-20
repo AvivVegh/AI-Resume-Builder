@@ -41,7 +41,7 @@ jobs:
       - name: Create config file
         working-directory: backend
         run: |
-          config=`cat .env.default`
+          config=`cat serverless.env.yml`
           config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
           config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
           base_url=https://$AM_APIGW_ID.execute-api.us-west-2.amazonaws.com/prod
@@ -50,8 +50,7 @@ jobs:
           config=${config//DB_HOST_VAR/$DB_HOST}
           config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
           config=${config//HTTP_HOST_VAR/$HTTP_HOST}
-          echo $config
-          echo "$config" >> .env
+          printf "$config" >> serverless.config.prod.yml
 
       - name: serverless deploy db-migration
         run: npx serverless deploy --stage prod --verbose

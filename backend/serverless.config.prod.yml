@@ -15,3 +15,4 @@ vpc:
     - ${env:AWS_SUBNET_ID_2}
     - ${env:AWS_SUBNET_ID_3}
     - ${env:AWS_SUBNET_ID_4}
+#add env variables here
