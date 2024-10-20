@@ -27,5 +27,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false
-  }
+  },
+  "include": ["**/*.ts", "**/*.js"],
+  "exclude": [
+    "**/*.spec.*",
+    "**/webpack.config.js",
+    "node_modules/**/*",
+    ".serverless/**/*",
+    ".webpack/**/*",
+    "_warmup/**/*",
+    ".vscode/**/*",
+    "build/**/*"
+  ]
 }

@@ -62,12 +62,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
-    new webpack.DefinePlugin({
-      'process.env': JSON.stringify(process.env),
-    }),
-  ],
+  plugins: [new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ })],
   watchOptions: {
     ignored: /node_modules/,
   },
