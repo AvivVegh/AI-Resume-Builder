@@ -12,11 +12,11 @@ export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 @Injectable()
 export class AuthService {
   configService = new ConfigService();
-  baseUrl;
-  callbackUrl;
-  clientId;
-  clientSecret;
-  tokenExpiration;
+  baseUrl: string;
+  callbackUrl: string;
+  clientId: string;
+  clientSecret: string;
+  tokenExpiration: number;
   constructor(
     private userService: UserService,
     private logger: Logger,
@@ -66,6 +66,7 @@ export class AuthService {
         params['refresh_token'] = refreshToken;
         params['grant_type'] = 'refresh_token';
       }
+
       const result = await axios.post(
         'https://oauth2.googleapis.com/token',
         params,
@@ -76,9 +77,13 @@ export class AuthService {
         },
       );
 
+      this.logger.debug('get access token user token success');
+
       const userInfoResult = await axios.post(
         `https://oauth2.googleapis.com/tokeninfo?id_token=${result.data.id_token}`,
       );
+
+      this.logger.debug('get access token user info success');
 
       const userInfo = userInfoResult.data;
 
@@ -89,6 +94,7 @@ export class AuthService {
         providerId: userInfo.sub,
         providerType: 'google',
       });
+
       this.saveTokensInCookie({
         accessToken: result.data.access_token,
         idToken: result.data.id_token,
@@ -96,6 +102,8 @@ export class AuthService {
         expiration: result.data.expires_in,
         res,
       });
+
+      this.logger.debug('save tokens in cookie success');
 
       return result.data;
     } catch (e) {
@@ -133,7 +141,7 @@ export class AuthService {
       res.cookie(
         COOKIE_REFRESH_TOKEN,
         refreshToken,
-        this.cookieSettings(this.tokenExpiration),
+        this.cookieSettings({ exp: this.tokenExpiration, secure: true }),
       );
     }
 

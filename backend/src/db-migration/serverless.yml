@@ -1,0 +1,51 @@
+service: airb-db-migration
+frameworkVersion: '3'
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: ${file(../../serverless.config.${opt:stage}.yml):runtime}
+  memorySize: ${file(../../serverless.config.${opt:stage}.yml):memorySize}
+  region: ${file(../../serverless.config.${opt:stage}.yml):region}
+  deploymentBucket:
+    name: ${file(../../serverless.config.${opt:stage}.yml):deploymentBucket}
+    serverSideEncryption: AES256
+  vpc: ${file(../../serverless.config.${opt:stage}.yml):vpc}
+  # environment: ${file(../../serverless.config.${opt:stage}.yml):environment}
+  stage: ${file(../../serverless.config.${opt:stage}.yml):stage}
+  role:
+    Fn::ImportValue: ${self:provider.stage}-gateway-LambdaExecutionIamRole
+  deploymentMethod: direct
+
+package:
+  patterns:
+    - ../../node_modules
+
+custom:
+  webpack:
+    webpackConfig: ../../webpack.config.js
+    packager: npm
+    includeModules:
+      packagePath: ../../package.json
+  cors:
+    origin: '*'
+    headers:
+      - tenant
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+    allowCredentials: true
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 0
+
+functions:
+  dbMigration:
+    handler: ./handler.handler
