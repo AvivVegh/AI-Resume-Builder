@@ -16,6 +16,7 @@ env:
   CLIENT_URL: ${{ vars.CLIENT_URL }}
   S3_BUCKET: ${{ vars.S3_BUCKET }}
   DB_HOST: ${{ vars.DB_HOST }}
+  API_GW_URL: ${{ vars.API_GW_URL }}
   AWS_SECURITY_GROUP_ID: ${{ vars.AWS_SECURITY_GROUP_ID }}
   AWS_SUBNET_ID_1: ${{ vars.AWS_SUBNET_ID_1 }}
   AWS_SUBNET_ID_2: ${{ vars.AWS_SUBNET_ID_2 }}
@@ -141,7 +142,7 @@ jobs:
           config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
           config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
           base_url=https://$AM_APIGW_ID.execute-api.us-west-2.amazonaws.com/prod
-          config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$base_url}
+          config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$API_GW_URL}
           config=${config//CLIENT_URL_VAR/$CLIENT_URL}
           config=${config//DB_HOST_VAR/$DB_HOST}
           config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
