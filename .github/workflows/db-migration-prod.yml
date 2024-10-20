@@ -38,19 +38,20 @@ jobs:
         run: npx serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY
         working-directory: backend
 
-      # - name: Create config file
-      #   working-directory: backend
-      #   run: |
-      #     config=`cat serverless.env.yml`
-      #     config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
-      #     config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
-      #     base_url=https://$AM_APIGW_ID.execute-api.us-west-2.amazonaws.com/prod
-      #     config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$API_GW_URL}
-      #     config=${config//CLIENT_URL_VAR/$CLIENT_URL}
-      #     config=${config//DB_HOST_VAR/$DB_HOST}
-      #     config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
-      #     config=${config//HTTP_HOST_VAR/$HTTP_HOST}
-      #     printf "$config" >> serverless.config.prod.yml
+      - name: Create config file
+        working-directory: backend
+        run: |
+          config=`cat .env.default`
+          config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
+          config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
+          base_url=https://$AM_APIGW_ID.execute-api.us-west-2.amazonaws.com/prod
+          config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$API_GW_URL}
+          config=${config//CLIENT_URL_VAR/$CLIENT_URL}
+          config=${config//DB_HOST_VAR/$DB_HOST}
+          config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
+          config=${config//HTTP_HOST_VAR/$HTTP_HOST}
+          echo $config
+          echo "$config" >> .env
 
       - name: serverless deploy db-migration
         run: npx serverless deploy --stage prod --verbose
