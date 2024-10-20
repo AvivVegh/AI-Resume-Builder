@@ -22,6 +22,7 @@ env:
   AWS_SUBNET_ID_2: ${{ vars.AWS_SUBNET_ID_2 }}
   AWS_SUBNET_ID_3: ${{ vars.AWS_SUBNET_ID_3 }}
   AWS_SUBNET_ID_4: ${{ vars.AWS_SUBNET_ID_4 }}
+  HTTP_HOST: ${{ vars.HTTP_HOST }}
 
 jobs:
   # version:
@@ -146,6 +147,7 @@ jobs:
           config=${config//CLIENT_URL_VAR/$CLIENT_URL}
           config=${config//DB_HOST_VAR/$DB_HOST}
           config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
+          config=${config//HTTP_HOST_VAR/$HTTP_HOST}
           echo $config
           echo "$config" >> .env
 
