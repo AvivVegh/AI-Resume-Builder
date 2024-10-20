@@ -10,8 +10,8 @@ export const typeOrmConfig = {
   username: configService.get('db_username'),
   password: configService.get('db_password'),
   database: configService.get('db_database'),
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/migrations/*{.ts,.js}'],
+  entities: ['**/*.entity{.ts,.js}'],
+  migrations: ['./src/migrations/*{.ts,.js}'],
   autoLoadEntities: false,
   synchronize: false,
   ssl: {
