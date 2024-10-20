@@ -1,6 +1,6 @@
-import { config as dotenvConfig } from 'dotenv';
+// import { config as dotenvConfig } from 'dotenv';
 
-dotenvConfig({ path: '.env' });
+// dotenvConfig({ path: '.env' });
 
 export class ConfigService {
   private readonly envConfig: Record<string, any>;
