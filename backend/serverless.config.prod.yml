@@ -17,10 +17,9 @@ vpc:
     - ${env:AWS_SUBNET_ID_4}
 environment:
   http_host: ${env:HTTP_HOST}
-  http_port: ${env:HTTP_PORT}
   google_client_id: ${env:GOOGLE_CLIENT_ID}
   google_client_secret: ${env:GOOGLE_CLIENT_SECRET}
-  google_callback_base_url: ${env:GOOGLE_CALLBACK_BASE_URL}
+  google_callback_base_url: ${env:API_GW_URL}
   google_callback_path: auth/google/callback
   refresh_token_expiration: 2419200
   client_url: ${env:CLIENT_URL}
