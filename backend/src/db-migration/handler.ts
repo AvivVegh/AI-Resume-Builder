@@ -1,8 +1,10 @@
+import { APIGatewayEvent, Context } from 'aws-lambda';
+
 import { DataSource } from 'typeorm';
 import { typeOrmConfig } from '../config/typeorm';
 
-export const handler = async () => {
-  const dataSource = new DataSource(typeOrmConfig);
+export const handler = async (event: APIGatewayEvent, context: Context) => {
+  const dataSource = new DataSource({ ...typeOrmConfig } as any);
 
   await dataSource.initialize();
 
