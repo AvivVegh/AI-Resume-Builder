@@ -14,7 +14,6 @@ env:
   AWS_DEFAULT_OUTPUT: json
   AWS_REGION: ${{ vars.AWS_REGION }}
   CLIENT_URL: ${{ vars.CLIENT_URL }}
-  API_GW_ID: ${{ vars.API_GW_ID }}
   S3_BUCKET: ${{ vars.S3_BUCKET }}
   DB_HOST: ${{ vars.DB_HOST }}
   AWS_SECURITY_GROUP_ID: ${{ vars.AWS_SECURITY_GROUP_ID }}
@@ -141,7 +140,7 @@ jobs:
           config=`cat .env.default`
           config=${config//GOOGLE_CLIENT_ID_VAR/$GOOGLE_CLIENT_ID}
           config=${config//GOOGLE_CLIENT_SECRET_VAR/$GOOGLE_CLIENT_SECRET}
-          base_url=https://$API_GW_ID.execute-api.us-west-2.amazonaws.com/main
+          base_url=https://$AM_APIGW_ID.execute-api.us-west-2.amazonaws.com/prod
           config=${config//GOOGLE_CALLBACK_BASE_URL_VAR/$base_url}
           config=${config//CLIENT_URL_VAR/$CLIENT_URL}
           config=${config//DB_HOST_VAR/$DB_HOST}
