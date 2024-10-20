@@ -147,7 +147,8 @@ jobs:
           config=${config//CLIENT_URL_VAR/$CLIENT_URL}
           config=${config//DB_HOST_VAR/$DB_HOST}
           config=${config//DB_PASSWORD_VAR/$DB_PASSWORD}
-          config=${config//HTTP_HOST_VAR/$HTTP_HOST}
+          config=${config//HTTP_HOST_VAR/$HTTP_HOST}          
+          echo $config
           printf "$config" >> serverless.config.prod.yml
 
       - name: Deploy services
