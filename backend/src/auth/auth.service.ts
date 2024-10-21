@@ -53,6 +53,7 @@ export class AuthService {
     refreshToken?: string;
   }): Promise<any> {
     try {
+      this.logger.log('get access token user token', { code, refreshToken });
       const params = {
         redirect_uri: this.callbackUrl,
         client_id: this.clientId,
@@ -77,13 +78,13 @@ export class AuthService {
         },
       );
 
-      this.logger.debug('get access token user token success');
+      this.logger.log('get access token user token success');
 
       const userInfoResult = await axios.post(
         `https://oauth2.googleapis.com/tokeninfo?id_token=${result.data.id_token}`,
       );
 
-      this.logger.debug('get access token user info success');
+      this.logger.log('get access token user info success');
 
       const userInfo = userInfoResult.data;
 
@@ -103,7 +104,7 @@ export class AuthService {
         res,
       });
 
-      this.logger.debug('save tokens in cookie success');
+      this.logger.log('save tokens in cookie success');
 
       return result.data;
     } catch (e) {
