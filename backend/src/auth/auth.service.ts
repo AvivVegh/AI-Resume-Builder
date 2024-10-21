@@ -108,7 +108,7 @@ export class AuthService {
 
       return result.data;
     } catch (e) {
-      console.log(e);
+      this.logger.error(e, 'get access token user token error');
       return null;
     }
   }
