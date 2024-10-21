@@ -34,7 +34,8 @@ custom:
   webpack:
     webpackConfig: 'webpack.config.js'
     packager: 'npm'
-    includeModules: true
+    includeModules:
+      packagePath: ./package.json
   authorizer:
     type: CUSTOM
     authorizerId:
