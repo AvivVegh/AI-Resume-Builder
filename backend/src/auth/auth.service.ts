@@ -68,15 +68,21 @@ export class AuthService {
         params['grant_type'] = 'refresh_token';
       }
 
-      const result = await axios.post(
-        'https://oauth2.googleapis.com/token',
-        params,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+      let result;
+      try {
+        result = await axios.post(
+          'https://oauth2.googleapis.com/token',
+          params,
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
-        },
-      );
+        );
+      } catch (e) {
+        this.logger.error(e, 'get access token user token error');
+        return null;
+      }
 
       this.logger.log('get access token user token success');
 
