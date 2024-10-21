@@ -32,7 +32,7 @@ package:
 
 custom:
   webpack:
-    webpackConfig: './webpack.config.js'
+    webpackConfig: 'webpack.config.js'
     packager: 'npm'
     includeModules: true
   authorizer:
