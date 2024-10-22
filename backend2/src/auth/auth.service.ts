@@ -151,8 +151,10 @@ export class AuthService {
     date.setTime(date.getTime() + exp * 1000);
 
     return {
+      sameSite: 'none',
+      path: '/',
       // sameSite: 'lax',
-      expires: date,
+      // expires: date,
       // httpOnly: secure,
       // domain: this.clientBaseUrl,
       // secure: secure,

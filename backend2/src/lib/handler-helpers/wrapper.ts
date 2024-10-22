@@ -244,7 +244,7 @@ const getCookies = () => {
 
       const parseCookie = serialize(key, cookieValue.value);
 
-      cookies.push(parseCookie + '; Path=/;');
+      cookies.push(parseCookie + '; Path=/; ');
     }
   }
   return cookies;
