@@ -149,6 +149,7 @@ export class AuthService {
   cookieSettings({ secure, exp = 0 }: { exp: number; secure: boolean }) {
     const date = new Date();
     date.setTime(date.getTime() + exp * 1000);
+
     return {
       sameSite: 'lax',
       expires: date,
