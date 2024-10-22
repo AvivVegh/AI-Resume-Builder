@@ -3,20 +3,18 @@ timeout: 30
 runtime: nodejs20.x
 memorySize: 1280
 versionFunctions: false
-tenantId: hsfts
 stage: ${env:STAGE}
-newRelicLinkedAccount: ${env:NEW_RELIC_LINKED_ACCOUNT}
-newRelicAccountId: ${env:NEW_RELIC_ACCOUNT_ID}
-newRelicApiKey: ${env:NEW_RELIC_API_KEY}
 tracing:
   lambda: true
 deploymentBucket: ${env:S3_BUCKET}
 vpc:
   securityGroupIds:
-    - ${env:AWS_securityGroupId1}
+    - ${env:AWS_SECURITY_GROUP_ID}
   subnetIds:
-    - ${env:AWS_subnetId1}
-    - ${env:AWS_subnetId2}
+    - ${env:AWS_SUBNET_ID_1}
+    - ${env:AWS_SUBNET_ID_2}
+    - ${env:AWS_SUBNET_ID_3}
+    - ${env:AWS_SUBNET_ID_4}
 environment:
   DatabaseUrl: ${ssm:/aws/reference/secretsmanager/ASSET_MANAGER_DATABASE_URL}
   AssetsBucketName: ${env:ASSETS_BUCKET_NAME}
