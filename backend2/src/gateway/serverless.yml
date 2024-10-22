@@ -23,7 +23,7 @@ provider:
   versionFunctions: ${file(../../serverless.config.${opt:stage}.yml):versionFunctions}
   tracing: ${file(../../serverless.config.${opt:stage}.yml):tracing}
   region: ${file(../../serverless.config.${opt:stage}.yml):region}
-  environment: ${file(../../serverless.config.${opt:stage}.yml):environment}
+  # environment: ${file(../../serverless.config.${opt:stage}.yml):environment}
   stage: ${file(../../serverless.config.${opt:stage}.yml):stage}
   deploymentMethod: direct
 
