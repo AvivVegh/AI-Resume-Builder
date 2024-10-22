@@ -143,6 +143,17 @@ resources:
         ResponseType: DEFAULT_5XX
         RestApiId: { Ref: AMApiGateway }
 
+    GatewayResponseDefault3XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.Location: true
+        ResponseType: DEFAULT_3XX
+        StatusCodes: ['302']
+        RestApiId: { Ref: AMApiGateway }
+
   Outputs:
     apiGatewayRestApiId:
       Value:
