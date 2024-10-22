@@ -242,7 +242,7 @@ const getCookies = () => {
     for (const key of cookiesKeys) {
       const cookieValue = cookie[key];
 
-      const parseCookie = serialize(key, cookieValue.value, cookieValue.options);
+      const parseCookie = serialize(key, cookieValue.value);
 
       cookies.push(parseCookie + '; Path=/;');
     }
