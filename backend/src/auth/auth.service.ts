@@ -169,7 +169,7 @@ export class AuthService {
     const date = new Date();
     date.setTime(date.getTime() + exp * 1000);
     return {
-      sameSite: 'lax',
+      // sameSite: 'lax',
       expires: date,
       // httpOnly: secure,
       // domain: this.baseUrl,
