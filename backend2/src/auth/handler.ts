@@ -21,13 +21,13 @@ export const googleCallback = handlerWrapper(async (event: APIGatewayEvent, cont
 
   const authService = new AuthService(logger);
 
-  await authService.gAccessToken({ code, refreshToken: refresh });
-
+  const result = await authService.gAccessToken({ code, refreshToken: refresh });
+  const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}`;
   logger.debug('google callback ended');
 
   return {
     statusCode: 302,
-    data: clientUrl,
+    data: url,
   };
 });
 
@@ -59,10 +59,11 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
       logger.debug('login - user is not authenticated refresh token');
 
       try {
-        await authService.gAccessToken({ refreshToken });
+        const result = await authService.gAccessToken({ refreshToken });
+        const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}`;
         return {
           statusCode: 302,
-          data: clientUrl,
+          data: url,
         };
       } catch (e) {
         logger.error(e, 'cannot refresh token');

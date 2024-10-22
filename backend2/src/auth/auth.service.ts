@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getConfig } from '../lib/configuration';
 import { Logger } from '../lib/logger';
 import { RequestContext } from '../lib/request-context';
+import { TokenResultDto } from './token-result.dto';
 
 export const COOKIE_ACCESS_TOKEN = 'res-access-token';
 export const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
@@ -100,7 +101,11 @@ export class AuthService {
 
       this.logger.info('save tokens in cookie success');
 
-      return result.data;
+      return {
+        accessToken: result.data.access_token,
+        idToken: result.data.id_token,
+        refreshToken: result.data.refresh_token,
+      } as TokenResultDto;
     } catch (e) {
       this.logger.error(e, 'get access token user token error');
       return null;

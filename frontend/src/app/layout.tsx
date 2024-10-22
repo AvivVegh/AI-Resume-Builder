@@ -26,8 +26,8 @@ export default function RootLayout({
   const router = useRouter();
 
   useEffect(() => {
-    const cookie = getCookie("res-is-authenticated");
-    if (cookie) {
+    const isAuth = localStorage.getItem("is_authenticated");
+    if (isAuth) {
       router.push("/home");
     } else {
       router.push("/login");

@@ -1,5 +1,4 @@
 "use client";
-import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { authUrl } from "../util/api";
@@ -9,8 +8,9 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const cookie = getCookie("res-access-token");
-    if (cookie) {
+    const accessToken = localStorage.getItem("access_token");
+
+    if (accessToken) {
       router.push("/home");
     }
   }, []);

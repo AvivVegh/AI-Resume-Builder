@@ -54,7 +54,7 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       };
     }
   } else if (response.statusCode === 302) {
-    const cookies = getCookies();
+    // const cookies = getCookies();
     const res = {
       statusCode: 302,
       headers: {
@@ -64,12 +64,12 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       multiValueHeaders: {},
     };
 
-    if (cookies?.length) {
-      res.multiValueHeaders = {
-        'Cache-Control': 'no-cache',
-        'Set-Cookie': getCookies(),
-      };
-    }
+    // if (cookies?.length) {
+    //   res.multiValueHeaders = {
+    //     'Cache-Control': 'no-cache',
+    //     'Set-Cookie': getCookies(),
+    //   };
+    // }
 
     logger.debug('redirecting to', JSON.stringify(res));
 
