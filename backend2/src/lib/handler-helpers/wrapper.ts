@@ -10,7 +10,7 @@ import { IDataResponse, IErrorResponse, IFileResponse } from '../../types/http-r
 import { InterfaceFrom, toJoiObject } from '../../types/joi-util';
 import { HttpResponses } from '../http-responses';
 import { extractBody, extractParams, extractQueryParams } from '../request';
-import { serialize, parse } from 'cookie';
+import { serialize } from 'cookie';
 
 export type Validator = <T extends Record<string, any>>(event: APIGatewayEvent, context?: Context) => T;
 
