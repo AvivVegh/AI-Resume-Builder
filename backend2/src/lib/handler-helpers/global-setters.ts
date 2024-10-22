@@ -1,8 +1,6 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
-
 import 'reflect-metadata';
 import { parse } from 'cookie';
-
 import { myContainer } from '../../inversify.config';
 import { Database, DatabaseType } from '../database/data-source';
 import { User } from '../../types/user';
