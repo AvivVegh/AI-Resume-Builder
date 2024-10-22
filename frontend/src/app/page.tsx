@@ -8,7 +8,7 @@ export default function Main() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const idToken = router.query?.id_token;
+    const idToken = searchParams.get("id_token");
     const accessToken = searchParams.get("access_token");
     const refreshToken = searchParams.get("refresh_token");
 
