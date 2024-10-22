@@ -151,11 +151,11 @@ export class AuthService {
     date.setTime(date.getTime() + exp * 1000);
 
     return {
-      sameSite: 'lax',
+      // sameSite: 'lax',
       expires: date,
-      httpOnly: secure,
-      domain: this.clientBaseUrl,
-      secure: secure,
+      // httpOnly: secure,
+      // domain: this.clientBaseUrl,
+      // secure: secure,
     };
   }
 }
