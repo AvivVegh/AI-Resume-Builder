@@ -171,9 +171,9 @@ export class AuthService {
     return {
       sameSite: 'lax',
       expires: date,
-      httpOnly: secure,
+      // httpOnly: secure,
       domain: this.baseUrl,
-      secure: secure,
+      // secure: secure,
     };
   }
 }
