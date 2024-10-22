@@ -4,7 +4,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/navigation";
 import { useEffect } from "react";
-import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 
 const geistSans = localFont({
