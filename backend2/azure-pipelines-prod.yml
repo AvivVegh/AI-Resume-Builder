@@ -1,0 +1,197 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: stage
+    value: prod
+  - name: YARN_CACHE_FOLDER
+    value: $(Pipeline.Workspace)/.yarn
+
+trigger:
+  - 'main'
+
+jobs:
+  - job: 'APIGatewayDeployment'
+    variables:
+      - group: Prod
+    steps:
+      - checkout: self
+        clean: true
+        fetchDepth: 1 # Fetch only one commit
+
+      - task: UseNode@1
+        inputs:
+          version: '20.x'
+
+      - task: Cache@2
+        inputs:
+          key: 'yarn | "$(Agent.OS)" | yarn.lock'
+          restoreKeys: |
+            yarn | "$(Agent.OS)"
+            yarn
+          path: $(YARN_CACHE_FOLDER)
+        displayName: Cache Yarn packages
+
+      - script: yarn --frozen-lockfile
+        displayName: install dependencies
+
+      # - script: yarn lint
+      #   displayName: 'yarn lint'
+
+      # - script: yarn test
+      #   displayName: 'yarn test'
+
+      # Api Gateway should be first to deploy
+      - script: npx serverless config credentials --provider aws --key $(AWS_ACCESS_KEY_ID) --secret $(AWS_SECRET_ACCESS_KEY)
+        displayName: 'provide AWS credentials'
+
+      - script: npx serverless deploy --stage $(stage) --verbose
+        displayName: 'serverless deploy api gateway'
+        workingDirectory: './src/gateway'
+        env:
+          AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+          AWS_REGION: $(AWS_REGION)
+          AWS_securityGroupId1: $(AWS_securityGroupId1)
+          AWS_subnetId1: $(AWS_subnetId1)
+          AWS_subnetId2: $(AWS_subnetId2)
+          NODE_OPTIONS: --max-old-space-size=6000
+          NEW_RELIC_ACCOUNT_ID: $(NEW_RELIC_ACCOUNT_ID)
+          NEW_RELIC_API_KEY: $(NEW_RELIC_API_KEY)
+          NEW_RELIC_LINKED_ACCOUNT: $(NEW_RELIC_LINKED_ACCOUNT)
+
+  # - job: 'RunDatabaseMigration'
+  #   dependsOn: APIGatewayDeployment
+  #   variables:
+  #     - group: Prod
+
+  #   steps:
+  #     - checkout: self
+  #       clean: true
+  #       fetchDepth: 1 # Fetch only one commit
+
+  #     - task: UseNode@1
+  #       inputs:
+  #         version: '20.x'
+
+  #     - task: Cache@2
+  #       inputs:
+  #         key: 'yarn | "$(Agent.OS)" | yarn.lock'
+  #         restoreKeys: |
+  #           yarn | "$(Agent.OS)"
+  #           yarn
+  #         path: $(YARN_CACHE_FOLDER)
+  #       displayName: Cache Yarn packages
+
+  #     - script: yarn --frozen-lockfile
+  #       displayName: install dependencies
+
+  #     - script: npx serverless config credentials --provider aws --key $(AWS_ACCESS_KEY_ID) --secret $(AWS_SECRET_ACCESS_KEY)
+  #       displayName: 'provide AWS credentials'
+
+  #     - script: npx serverless deploy --stage $(stage) --verbose
+  #       displayName: 'serverless deploy db-migration'
+  #       workingDirectory: './src/db-migration'
+  #       env:
+  #         AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+  #         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+  #         AWS_REGION: $(AWS_REGION)
+  #         AWS_securityGroupId1: $(AWS_securityGroupId1)
+  #         AWS_subnetId1: $(AWS_subnetId1)
+  #         AWS_subnetId2: $(AWS_subnetId2)
+  #         NODE_OPTIONS: --max-old-space-size=6000
+
+  #     - script: npx serverless invoke --stage $(stage) --region $(AWS_REGION) --function dbMigration --data "foo"
+  #       displayName: 'invoke db-migration'
+  #       workingDirectory: './src/db-migration'
+  #       env:
+  #         AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+  #         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+  #         AWS_REGION: $(AWS_REGION)
+  #         AWS_securityGroupId1: $(AWS_securityGroupId1)
+  #         AWS_subnetId1: $(AWS_subnetId1)
+  #         AWS_subnetId2: $(AWS_subnetId2)
+  #         NODE_OPTIONS: --max-old-space-size=6000
+
+  - job: 'DeployServerlessToProd'
+    dependsOn: APIGatewayDeployment
+    variables:
+      - group: Prod
+    strategy:
+      maxParallel: 1
+      matrix:
+        delete_assets_service:
+          label: delete assets service
+          subdir: delete-assets
+
+        create_folder_service:
+          label: create folder service
+          subdir: create-folder
+
+        delete_folder_service:
+          label: delete folder service
+          subdir: delete-folder
+
+        get_assets_service:
+          label: get assets service
+          subdir: get-assets
+
+        get_file_tree_service:
+          label: get file tree service
+          subdir: get-file-tree
+
+        get_pre_signed_url_service:
+          label: get pre signed url service
+          subdir: get-pre-signed-url
+
+        save_assets_service:
+          label: save assets service
+          subdir: save-assets
+
+        admin_service:
+          label: admin service
+          subdir: admin
+
+        test_service:
+          label: test service
+          subdir: test
+
+    steps:
+      - checkout: self
+        clean: true
+        fetchDepth: 1 # Fetch only one commit
+
+      - task: UseNode@1
+        inputs:
+          version: '20.x'
+
+      - task: Cache@2
+        inputs:
+          key: 'yarn | "$(Agent.OS)" | yarn.lock'
+          restoreKeys: |
+            yarn | "$(Agent.OS)"
+            yarn
+          path: $(YARN_CACHE_FOLDER)
+        displayName: Cache Yarn packages
+
+      - script: yarn --frozen-lockfile
+        displayName: install dependencies
+
+      - script: npx serverless config credentials --provider aws --key $(AWS_ACCESS_KEY_ID) --secret $(AWS_SECRET_ACCESS_KEY)
+        displayName: 'provide AWS credentials'
+
+      - script: npx serverless deploy --stage $(stage) --verbose
+        displayName: 'serverless deploy $(lablel)'
+        workingDirectory: './src/$(subdir)'
+        env:
+          AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+          AWS_REGION: $(AWS_REGION)
+          AWS_securityGroupId1: $(AWS_securityGroupId1)
+          AWS_subnetId1: $(AWS_subnetId1)
+          AWS_subnetId2: $(AWS_subnetId2)
+          NODE_OPTIONS: --max-old-space-size=6000
+          BitlyAccessToken: $(BITLY_ACCESS_TOKEN)
+          NEW_RELIC_ACCOUNT_ID: $(NEW_RELIC_ACCOUNT_ID)
+          NEW_RELIC_API_KEY: $(NEW_RELIC_API_KEY)
+          NEW_RELIC_LINKED_ACCOUNT: $(NEW_RELIC_LINKED_ACCOUNT)

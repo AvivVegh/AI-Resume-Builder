@@ -1,0 +1,26 @@
+region: ${env:AWS_REGION}
+timeout: 30
+runtime: nodejs20.x
+memorySize: 1280
+versionFunctions: false
+tenantId: hsfts
+stage: ${env:STAGE}
+newRelicLinkedAccount: ${env:NEW_RELIC_LINKED_ACCOUNT}
+newRelicAccountId: ${env:NEW_RELIC_ACCOUNT_ID}
+newRelicApiKey: ${env:NEW_RELIC_API_KEY}
+tracing:
+  lambda: true
+deploymentBucket: ${env:S3_BUCKET}
+vpc:
+  securityGroupIds:
+    - ${env:AWS_securityGroupId1}
+  subnetIds:
+    - ${env:AWS_subnetId1}
+    - ${env:AWS_subnetId2}
+environment:
+  DatabaseUrl: ${ssm:/aws/reference/secretsmanager/ASSET_MANAGER_DATABASE_URL}
+  AssetsBucketName: ${env:ASSETS_BUCKET_NAME}
+  AssetsBukcetBaseUrl: ${env:ASSETS_BUKCET_BASE_URL}
+  BitlyAccessToken: ${env:BITLY_ACCESS_TOKEN}
+  StageName: ${env:STAGE}
+  STAGE_NAME: ${env:STAGE}

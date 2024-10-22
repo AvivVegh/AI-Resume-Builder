@@ -1,5 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { ConfigService } from './configuration';
+import { UserEntity } from '../user/entities/user.entity';
 
 const configService = new ConfigService();
 
@@ -10,7 +11,7 @@ export const typeOrmConfig = {
   username: configService.get('db_username'),
   password: configService.get('db_password'),
   database: configService.get('db_database'),
-  entities: ['**/*.entity{.ts,.js}'],
+  entities: [UserEntity],
   migrations: ['./src/migrations/*{.ts,.js}'],
   autoLoadEntities: false,
   synchronize: false,

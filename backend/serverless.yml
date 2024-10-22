@@ -31,6 +31,8 @@ package:
     - ./node_modules
 
 custom:
+  serverless-offline:
+    httpPort: 3003
   webpack:
     webpackConfig: 'webpack.config.js'
     packager: 'npm'

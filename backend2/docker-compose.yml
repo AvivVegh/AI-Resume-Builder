@@ -1,0 +1,15 @@
+version: '3.4'
+services:
+  postgres:
+    image: postgres:15.3-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresMaster
+      - POSTGRES_DB=postgres
+    ports:
+      - '${DATABASE_PORT:-54325}:5432'
+    volumes:
+      - pgdata:/var/lib/postgres/data
+      - ./db/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  pgdata: {}
