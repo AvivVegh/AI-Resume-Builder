@@ -32,8 +32,6 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
     'Access-Control-Allow-Credentials': true,
   } as any;
 
-  headers = addCookiesToHeaders(headers) as any;
-
   const statusCode = response.statusCode;
 
   if (response.error) {
@@ -56,11 +54,18 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       };
     }
   } else if (response.statusCode === 302) {
+    console.log('reddirect', response.data, JSON.stringify(headers));
+
     return {
       statusCode: 302,
       headers: {
-        ...headers,
         Location: response.data,
+        ...headers,
+      },
+      multiValueHeaders: {
+        'Cache-Control': 'no-cache',
+        // 'Set-Cookie': ['cookie1=value1; Path=/; Max-Age=259200', 'cookie2=value2; Path=/; Max-Age=259200'],
+        'Set-Cookie': getCookies(),
       },
     };
   } else if (response.contentType) {
@@ -221,25 +226,20 @@ export const handlerWrapper =
     }
   };
 
-const addCookiesToHeaders = (headers: Record<string, string>) => {
+const getCookies = () => {
   const context = RequestContext.getInstance();
   const cookie = context.getCookies();
+  let cookies = [];
   if (cookie) {
     const cookiesKeys = Object.keys(cookie);
 
-    let cookies = '';
     for (const key of cookiesKeys) {
       const cookieValue = cookie[key];
 
       const parseCookie = serialize(key, cookieValue.value, cookieValue.options);
 
-      // console.log('parseCookie', parseCookie);
-
-      cookies += parseCookie + ' ';
+      cookies.push(parseCookie + '; Path=/;');
     }
-
-    headers['Set-Cookie'] = cookies;
-    console.log('headers', headers);
   }
-  return headers;
+  return cookies;
 };

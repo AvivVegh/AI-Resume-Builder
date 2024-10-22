@@ -5,7 +5,6 @@ plugins:
   - serverless-offline
   - serverless-webpack
   - serverless-prune-plugin
-  - serverless-newrelic-lambda-layers
 
 provider:
   name: aws
@@ -21,23 +20,17 @@ provider:
   role:
     Fn::ImportValue: ${self:provider.stage}-gateway-LambdaExecutionIamRole
   deploymentMethod: direct
-
   apiGateway:
     restApiId:
       'Fn::ImportValue': ${self:provider.stage}-gateway-RestApiId
     restApiRootResourceId:
-      'Fn::ImportValue':
-        ${self:provider.stage}-gateway-RootResourceId
-        # restApiResources:
-    #   /assets:
-    #     'Fn::ImportValue': MyApiGateway-assetsPath
+      'Fn::ImportValue': ${self:provider.stage}-gateway-RootResourceId
 
 package:
   patterns:
     - ../../node_modules
 
 custom:
-  tenantId: ${file(../../serverless.config.${opt:stage}.yml):tenantId}
   authorizer:
     type: CUSTOM
     authorizerId:

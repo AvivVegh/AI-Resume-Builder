@@ -49,6 +49,7 @@ custom:
       - Authorization
       - X-Api-Key
       - X-Amz-Security-Token
+      - Set-Cookie
     allowCredentials: true
   prune:
     automatic: true
@@ -77,14 +78,6 @@ functions:
     events:
       - http:
           path: /auth/logout
-          method: get
-          # authorizer: ${self:custom.authorizer}
-          cors: ${self:custom.cors}
-  test:
-    handler: ./handler.test
-    events:
-      - http:
-          path: /test
           method: get
           # authorizer: ${self:custom.authorizer}
           cors: ${self:custom.cors}

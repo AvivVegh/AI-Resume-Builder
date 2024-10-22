@@ -6,13 +6,8 @@ import { Logger } from '../lib/logger';
 import { RequestContext } from '../lib/request-context';
 import { getConfig } from '../lib/configuration';
 import { AuthService, COOKIE_ACCESS_TOKEN, COOKIE_IS_AUTHENTICATED, COOKIE_REFRESH_TOKEN } from './auth.service';
-import { HttpResponses } from '../lib/http-responses';
 
 export const paths = ['google', '/google/callback', 'logout'];
-
-export const test = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
-  return HttpResponses.DATA_RESPONSE({ a: 'test' });
-});
 
 export const googleCallback = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
   const clientUrl = getConfig('client_url');

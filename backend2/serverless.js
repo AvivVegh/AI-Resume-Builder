@@ -43,7 +43,6 @@ module.exports = {
       // credentials: true,
       // allowCredentials: true,
     },
-    tenantId: '${file(./serverless.config.${sls:stage}.yml):tenantId}',
     authorizer: {
       type: 'CUSTOM',
       authorizerId: {
@@ -52,17 +51,8 @@ module.exports = {
     },
     cors: {
       origin: '*',
-      headers: [
-        'Content-Type',
-        'X-Amz-Date',
-        'Authorization',
-        'X-Api-Key',
-        'X-Amz-Security-Token',
-        'Set-Cookie',
-        'Cookie',
-      ],
+      headers: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token', 'Set-Cookie'],
       allowCredentials: true,
-      withCredentials: true,
     },
   },
   provider: {
