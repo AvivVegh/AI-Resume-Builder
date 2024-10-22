@@ -60,10 +60,10 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
         Location: response.data,
         ...headers,
       },
-      multiValueHeaders: {
-        'Cache-Control': 'no-cache',
-        'Set-Cookie': getCookies(),
-      },
+      // multiValueHeaders: {
+      //   'Cache-Control': 'no-cache',
+      //   'Set-Cookie': getCookies(),
+      // },
     };
 
     logger.debug('redirecting to', JSON.stringify(res));
