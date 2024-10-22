@@ -27,9 +27,13 @@ export class AuthService {
   }
 
   getGoogleRedirectUrl(): string {
-    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${getConfig(
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${getConfig(
       'google_client_id'
     )}&redirect_uri=${this.callbackUrl}&response_type=code&scope=profile email openid&prompt=consent&access_type=offline`;
+
+    this.logger.debug('get google redirect url', url);
+
+    return url;
   }
 
   logout() {

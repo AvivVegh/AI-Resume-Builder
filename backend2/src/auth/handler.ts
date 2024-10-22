@@ -10,16 +10,20 @@ import { AuthService, COOKIE_ACCESS_TOKEN, COOKIE_IS_AUTHENTICATED, COOKIE_REFRE
 export const paths = ['google', '/google/callback', 'logout'];
 
 export const googleCallback = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
+  const logger = myContainer.resolve(Logger);
+
+  logger.debug('google callback started');
+
   const clientUrl = getConfig('client_url');
 
   const code = event.queryStringParameters.code;
   const refresh = event.queryStringParameters.refresh;
 
-  const logger = myContainer.resolve(Logger);
-
   const authService = new AuthService(logger);
 
   await authService.gAccessToken({ code, refreshToken: refresh });
+
+  logger.debug('google callback ended');
 
   return {
     statusCode: 302,
@@ -28,9 +32,13 @@ export const googleCallback = handlerWrapper(async (event: APIGatewayEvent, cont
 });
 
 export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
+  const logger = myContainer.resolve(Logger);
+
+  logger.debug('login started');
+
   const clientUrl = getConfig('client_url');
   const requestContext = RequestContext.getInstance();
-  const logger = myContainer.resolve(Logger);
+
   const authService = new AuthService(logger);
 
   try {
@@ -39,6 +47,8 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
     const isAuthenticated = requestContext.getCookie(COOKIE_IS_AUTHENTICATED);
 
     if (isAuthenticated && accessToken) {
+      logger.debug('login - user is authenticated');
+
       return {
         statusCode: 302,
         data: clientUrl,
@@ -46,6 +56,8 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
     }
 
     if (isAuthenticated && refreshToken) {
+      logger.debug('login - user is not authenticated refresh token');
+
       try {
         await authService.gAccessToken({ refreshToken });
         return {
@@ -59,6 +71,8 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
   } catch (e) {
     logger.error(e, 'cannot get cookies');
   }
+
+  logger.debug('login - user is not authenticated get redirect url');
 
   return {
     statusCode: 302,

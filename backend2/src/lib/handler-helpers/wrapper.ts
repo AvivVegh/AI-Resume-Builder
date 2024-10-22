@@ -54,9 +54,7 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       };
     }
   } else if (response.statusCode === 302) {
-    console.log('reddirect', response.data, JSON.stringify(headers));
-
-    return {
+    const res = {
       statusCode: 302,
       headers: {
         Location: response.data,
@@ -64,10 +62,13 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       },
       multiValueHeaders: {
         'Cache-Control': 'no-cache',
-        // 'Set-Cookie': ['cookie1=value1; Path=/; Max-Age=259200', 'cookie2=value2; Path=/; Max-Age=259200'],
         'Set-Cookie': getCookies(),
       },
     };
+
+    logger.debug('redirecting to', JSON.stringify(res));
+
+    return res;
   } else if (response.contentType) {
     const isTextContent = response.contentType.startsWith('text/');
 
