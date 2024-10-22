@@ -10,7 +10,7 @@ export const COOKIE_ID_TOKEN = 'res-id-token';
 export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
 
 export class AuthService {
-  baseUrl: string;
+  clientBaseUrl: string;
   callbackUrl: string;
   clientId: string;
   clientSecret: string;
@@ -19,7 +19,7 @@ export class AuthService {
     // private userService: UserService,
     private logger: Logger
   ) {
-    this.baseUrl = getConfig('http_host');
+    this.clientBaseUrl = getConfig('client_base_url');
     this.callbackUrl = `${getConfig('google_callback_base_url')}/${getConfig('google_callback_path')}`;
     this.clientId = getConfig('google_client_id');
     this.clientSecret = getConfig('google_client_secret');
@@ -149,7 +149,7 @@ export class AuthService {
       sameSite: 'lax',
       expires: date,
       httpOnly: secure,
-      domain: this.baseUrl,
+      domain: this.clientBaseUrl,
       secure: secure,
     };
   }
