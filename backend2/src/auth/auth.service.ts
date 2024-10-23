@@ -4,6 +4,7 @@ import { getConfig } from '../lib/configuration';
 import { Logger } from '../lib/logger';
 import { RequestContext } from '../lib/request-context';
 import { TokenResultDto } from './token-result.dto';
+import { UserService } from '../user/user.service';
 
 export const COOKIE_ACCESS_TOKEN = 'res-access-token';
 export const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
@@ -17,7 +18,7 @@ export class AuthService {
   clientSecret: string;
   tokenExpiration: number;
   constructor(
-    // private userService: UserService,
+    private userService: UserService,
     private logger: Logger
   ) {
     this.clientBaseUrl = getConfig('client_base_url');
@@ -25,6 +26,22 @@ export class AuthService {
     this.clientId = getConfig('google_client_id');
     this.clientSecret = getConfig('google_client_secret');
     this.tokenExpiration = parseInt(getConfig('refresh_token_expiration'));
+  }
+
+  async createUser({
+    email,
+    firstName,
+    lastName,
+    providerId,
+    providerType,
+  }: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    providerId: string;
+    providerType: string;
+  }) {
+    await this.userService.createUser({ email, firstName, lastName, providerId, providerType });
   }
 
   getGoogleRedirectUrl(): string {
@@ -84,13 +101,13 @@ export class AuthService {
 
       const userInfo = userInfoResult.data;
 
-      // await this.userService.createUser({
-      //   email: userInfo.email,
-      //   firstName: userInfo.given_name,
-      //   lastName: userInfo.family_name,
-      //   providerId: userInfo.sub,
-      //   providerType: 'google',
-      // });
+      await this.userService.createUser({
+        email: userInfo.email,
+        firstName: userInfo.given_name,
+        lastName: userInfo.family_name,
+        providerId: userInfo.sub,
+        providerType: 'google',
+      });
 
       this.saveTokensInCookie({
         accessToken: result.data.access_token,

@@ -6,6 +6,9 @@ import { Logger } from '../lib/logger';
 import { RequestContext } from '../lib/request-context';
 import { getConfig } from '../lib/configuration';
 import { AuthService, COOKIE_ACCESS_TOKEN, COOKIE_IS_AUTHENTICATED, COOKIE_REFRESH_TOKEN } from './auth.service';
+import { UserService } from '../user/user.service';
+import { UserRepository, UserRepositoryType } from '../repositories/user.repository';
+import { HttpResponses } from '../lib/http-responses';
 
 export const paths = ['google', '/google/callback', 'logout'];
 
@@ -19,7 +22,10 @@ export const googleCallback = handlerWrapper(async (event: APIGatewayEvent, cont
   const code = event.queryStringParameters.code;
   const refresh = event.queryStringParameters.refresh;
 
-  const authService = new AuthService(logger);
+  const repository = myContainer.get<UserRepository>(UserRepositoryType);
+  const userService = new UserService(repository, logger);
+
+  const authService = new AuthService(userService, logger);
 
   const result = await authService.gAccessToken({ code, refreshToken: refresh });
   const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}`;
@@ -39,7 +45,10 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
   const clientUrl = getConfig('client_url');
   const requestContext = RequestContext.getInstance();
 
-  const authService = new AuthService(logger);
+  const repository = myContainer.get<UserRepository>(UserRepositoryType);
+  const userService = new UserService(repository, logger);
+
+  const authService = new AuthService(userService, logger);
 
   try {
     const refreshToken = requestContext.getCookie(COOKIE_REFRESH_TOKEN);
@@ -86,7 +95,10 @@ export const logout = handlerWrapper(async (event: APIGatewayEvent, context: Con
 
   const logger = myContainer.resolve(Logger);
 
-  const authService = new AuthService(logger);
+  const repository = myContainer.get<UserRepository>(UserRepositoryType);
+  const userService = new UserService(repository, logger);
+
+  const authService = new AuthService(userService, logger);
 
   await authService.logout();
 
@@ -94,4 +106,25 @@ export const logout = handlerWrapper(async (event: APIGatewayEvent, context: Con
     statusCode: 302,
     data: clientUrl,
   };
+});
+
+export const test = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
+  const clientUrl = getConfig('client_url');
+
+  const logger = myContainer.resolve(Logger);
+
+  const repository = myContainer.get<UserRepository>(UserRepositoryType);
+  const userService = new UserService(repository, logger);
+
+  const authService = new AuthService(userService, logger);
+
+  await authService.createUser({
+    email: 'foo@gmail.com',
+    firstName: 'foo',
+    lastName: 'bar',
+    providerId: '123',
+    providerType: 'google',
+  });
+
+  return HttpResponses.DATA_RESPONSE({}, 1);
 });

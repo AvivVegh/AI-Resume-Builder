@@ -1,10 +1,11 @@
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { DataSource, EntityManager } from 'typeorm';
-import { Asset } from '../../entities/asset.entity';
+
+import { join } from 'path';
+
 import { getConfig } from '../configuration';
-import { migrations } from './migrations';
-import { Folder } from '../../entities/folder.entity';
+import * as entities from '../../entities';
 
 export const DatabaseType = Symbol.for('Database');
 
@@ -45,14 +46,26 @@ export class Database {
 }
 
 export const getConnetionConfig = (): any => {
-  const databaseUrl = getConfig('DatabaseUrl');
+  const dbHost = getConfig('db_host');
+  const dbPort = getConfig('db_port');
+  const dbUsername = getConfig('db_username');
+  const dbPassword = getConfig('db_password');
+  const dbDatabase = getConfig('db_database');
 
   return {
     type: 'postgres',
-    url: databaseUrl,
-    entities: [Asset, Folder], // where our entities reside
-    migrations: migrations, // where our migrations reside
+    host: dbHost,
+    port: dbPort,
+    username: dbUsername,
+    password: dbPassword,
+    database: dbDatabase,
+    entities: Object.values(entities),
+    migrations: [join(__dirname, '**', '*.migrations.{ts,js}')],
     logging: true,
     synchronize: false,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   };
 };

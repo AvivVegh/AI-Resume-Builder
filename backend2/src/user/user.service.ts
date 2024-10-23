@@ -1,31 +1,33 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { UserRepository } from './user.repository';
-import { CreateUsersDto } from './dto/create-user.dto';
-import { UserEntity } from './entities/user.entity';
-import { jwtDecode } from 'jwt-decode';
+import { decode } from 'jsonwebtoken';
 
-@Injectable()
+import { CreateUsersDto } from './dto/create-user.dto';
+
+import { Logger } from '../lib/logger';
+import { UserRepository } from '../repositories/user.repository';
+import { UserEntity } from '../entities/user.entity';
+
 export class UserService {
   constructor(
     private userRepository: UserRepository,
-    private logger: Logger,
+    private logger: Logger
   ) {}
 
   async getUsers(): Promise<UserEntity[]> {
-    const users = this.userRepository.getAll();
-    this.logger.log(users, 'users');
+    const users = await this.userRepository.getAll();
     return users;
   }
 
   async getUser(token: string): Promise<UserEntity> {
-    const decoded = jwtDecode(token);
+    const payload = decode(token);
 
-    if (!decoded) {
+    if (!payload) {
       this.logger.error('invalid token');
       throw new Error('invalid token');
     }
 
-    const email = decoded['email'];
+    const tokenData = JSON.parse(payload as string);
+
+    const email = tokenData['email'];
     const user = await this.userRepository.getByEmail({ email });
     return user;
   }
@@ -33,7 +35,7 @@ export class UserService {
   async createUser(dto: CreateUsersDto): Promise<UserEntity> {
     let user = await this.userRepository.getByEmail({ email: dto.email });
     if (user) {
-      this.logger.log('user already exists', { id: user.id });
+      this.logger.info('user already exists', { id: user.id });
       return user;
     }
 
@@ -46,7 +48,7 @@ export class UserService {
     } as UserEntity;
 
     user = await this.userRepository.create(userEntity);
-    this.logger.log('user created', { id: user });
+    this.logger.info('user created', { id: user });
     return user;
   }
 }

@@ -13,7 +13,7 @@ export class User1728793793379 implements MigrationInterface {
               "deleted" boolean NOT NULL DEFAULT false,
               "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
           );
-          `,
+          `
     );
   }
 

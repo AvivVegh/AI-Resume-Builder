@@ -54,7 +54,6 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       };
     }
   } else if (response.statusCode === 302) {
-    // const cookies = getCookies();
     const res = {
       statusCode: 302,
       headers: {
@@ -63,15 +62,6 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
       },
       multiValueHeaders: {},
     };
-
-    // if (cookies?.length) {
-    //   res.multiValueHeaders = {
-    //     'Cache-Control': 'no-cache',
-    //     'Set-Cookie': getCookies(),
-    //   };
-    // }
-
-    logger.debug('redirecting to', JSON.stringify(res));
 
     return res;
   } else if (response.contentType) {
@@ -216,7 +206,7 @@ export const handlerWrapper =
 
     // await setUserRequestContext(event);
 
-    // await initEnitityManager();
+    await initEnitityManager();
 
     const logger = myContainer.resolve(Logger);
     try {
@@ -231,21 +221,3 @@ export const handlerWrapper =
       return responseCallback(HttpResponses.ERROR(error));
     }
   };
-
-const getCookies = () => {
-  const context = RequestContext.getInstance();
-  const cookie = context.getCookies();
-  let cookies = [];
-  if (cookie) {
-    const cookiesKeys = Object.keys(cookie);
-
-    for (const key of cookiesKeys) {
-      const cookieValue = cookie[key];
-
-      const parseCookie = serialize(key, cookieValue.value);
-
-      cookies.push(parseCookie + '; Path=/; ');
-    }
-  }
-  return cookies;
-};
