@@ -8,7 +8,6 @@ import { getConfig } from '../lib/configuration';
 import { AuthService, COOKIE_ACCESS_TOKEN, COOKIE_IS_AUTHENTICATED, COOKIE_REFRESH_TOKEN } from './auth.service';
 import { UserService } from '../user/user.service';
 import { UserRepository, UserRepositoryType } from '../repositories/user.repository';
-import { HttpResponses } from '../lib/http-responses';
 
 export const paths = ['google', '/google/callback', 'logout'];
 
@@ -106,25 +105,4 @@ export const logout = handlerWrapper(async (event: APIGatewayEvent, context: Con
     statusCode: 302,
     data: clientUrl,
   };
-});
-
-export const test = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
-  const clientUrl = getConfig('client_url');
-
-  const logger = myContainer.resolve(Logger);
-
-  const repository = myContainer.get<UserRepository>(UserRepositoryType);
-  const userService = new UserService(repository, logger);
-
-  const authService = new AuthService(userService, logger);
-
-  await authService.createUser({
-    email: 'foo@gmail.com',
-    firstName: 'foo',
-    lastName: 'bar',
-    providerId: '123',
-    providerType: 'google',
-  });
-
-  return HttpResponses.DATA_RESPONSE({}, 1);
 });
