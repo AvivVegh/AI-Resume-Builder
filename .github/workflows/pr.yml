@@ -109,6 +109,9 @@ jobs:
   services:
     needs: gateway
     runs-on: ubuntu-latest
+    strategy:
+      matrix: { dir: ["backend/src/auth", "backend/src/upload-resume"] }
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -154,7 +157,7 @@ jobs:
           printf "$config" >> serverless.config.prod.yml
 
       - name: Deploy services
-        working-directory: backend/src/auth
+        working-directory: ${{ matrix.dir }}
         run: npx serverless deploy --stage $STAGE --verbose
 
   frontend:
