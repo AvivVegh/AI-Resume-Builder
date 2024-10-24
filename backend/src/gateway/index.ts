@@ -1,7 +1,6 @@
 import { Callback, Context, Handler } from 'aws-lambda';
 import { JwtRsaVerifier } from 'aws-jwt-verify';
 import { decode } from 'jsonwebtoken';
-import { COOKIE_ID_TOKEN } from '../auth/auth.service';
 
 const getDenyPolicy = () => {
   // IAM default policy to deny all.
@@ -44,7 +43,7 @@ export const authorize: Handler = async (event: any, _context: Context, callback
   const methodArn = event.methodArn;
   const defaultDenyAllPolicy = getDenyPolicy();
 
-  const token = event.headers.cookies[COOKIE_ID_TOKEN];
+  const token = event.headers['Authorization'];
 
   try {
     if (!token) {

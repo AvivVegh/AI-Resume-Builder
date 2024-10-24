@@ -1,0 +1,66 @@
+service: airb-upload-resume
+frameworkVersion: '3'
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: ${file(../../serverless.config.${opt:stage}.yml):runtime}
+  memorySize: ${file(../../serverless.config.${opt:stage}.yml):memorySize}
+  region: ${file(../../serverless.config.${opt:stage}.yml):region}
+  deploymentBucket:
+    name: ${file(../../serverless.config.${opt:stage}.yml):deploymentBucket}
+    serverSideEncryption: AES256
+  # vpc: ${file(../../serverless.config.${opt:stage}.yml):vpc}
+  environment: ${file(../../serverless.config.${opt:stage}.yml):environment}
+  stage: ${file(../../serverless.config.${opt:stage}.yml):stage}
+  deploymentMethod: direct
+  role:
+    Fn::ImportValue: ${self:provider.stage}-gateway-LambdaExecutionIamRole
+  apiGateway:
+    restApiId:
+      'Fn::ImportValue': ${self:provider.stage}-gateway-RestApiId
+    restApiRootResourceId:
+      'Fn::ImportValue': ${self:provider.stage}-gateway-RootResourceId
+
+package:
+  patterns:
+    - ../../node_modules
+
+custom:
+  authorizer:
+    type: CUSTOM
+    authorizerId:
+      Fn::ImportValue: ${self:provider.stage}-gateway-AuthorizerId
+
+  webpack:
+    webpackConfig: ../../webpack.config.js
+    packager: npm
+    includeModules:
+      packagePath: ../../package.json
+  cors:
+    origin: '*'
+    headers:
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+    allowCredentials: true
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 0
+
+functions:
+  generate:
+    handler: ./handler.uploadResume
+    events:
+      - http:
+          path: /resume/generate
+          method: get
+          authorizer: ${self:custom.authorizer}
+          cors: ${self:custom.cors}
