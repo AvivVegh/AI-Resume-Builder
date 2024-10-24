@@ -40,10 +40,10 @@ const generateAuthResponse = (principalId: any, resource: any) => {
 };
 
 export const authorize: Handler = async (event: any, _context: Context, callback: Callback) => {
+  const token = event.authorizationToken;
+
   const methodArn = event.methodArn;
   const defaultDenyAllPolicy = getDenyPolicy();
-
-  const token = event.headers['Authorization'];
 
   try {
     if (!token) {
@@ -51,7 +51,7 @@ export const authorize: Handler = async (event: any, _context: Context, callback
       callback(null, defaultDenyAllPolicy);
     }
 
-    const payload = decode(token) as any;
+    const payload = decode(token.replace('Bearer', '').trim()) as any;
     console.log('payload:', payload);
 
     // Define IDP verifier parameters

@@ -3,7 +3,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
 
-const functionPaths = ['./src/auth/serverless.yml'];
+const functionPaths = ['./src/auth/serverless.yml', './src/upload-resume/serverless.yml'];
 
 // Rewrite handler paths to make this folder the root
 const functions = functionPaths.reduce((agg, file) => {
@@ -52,7 +52,7 @@ module.exports = {
     },
     cors: {
       origin: '*',
-      headers: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token', 'Set-Cookie'],
+      headers: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token'],
       allowCredentials: true,
     },
   },
