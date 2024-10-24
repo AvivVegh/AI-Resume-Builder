@@ -1,7 +1,6 @@
 import { Callback, Context, Handler } from 'aws-lambda';
 import { JwtRsaVerifier } from 'aws-jwt-verify';
 import { decode } from 'jsonwebtoken';
-import { COOKIE_ID_TOKEN } from '../auth/auth.service';
 
 const getDenyPolicy = () => {
   // IAM default policy to deny all.
@@ -41,10 +40,10 @@ const generateAuthResponse = (principalId: any, resource: any) => {
 };
 
 export const authorize: Handler = async (event: any, _context: Context, callback: Callback) => {
+  const token = event.authorizationToken;
+
   const methodArn = event.methodArn;
   const defaultDenyAllPolicy = getDenyPolicy();
-
-  const token = event.headers.cookies[COOKIE_ID_TOKEN];
 
   try {
     if (!token) {
@@ -52,7 +51,7 @@ export const authorize: Handler = async (event: any, _context: Context, callback
       callback(null, defaultDenyAllPolicy);
     }
 
-    const payload = decode(token) as any;
+    const payload = decode(token.replace('Bearer', '').trim()) as any;
     console.log('payload:', payload);
 
     // Define IDP verifier parameters

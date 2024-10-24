@@ -1,4 +1,4 @@
-service: airb-auth
+service: airb-upload-resume
 frameworkVersion: '3'
 
 plugins:
@@ -56,27 +56,11 @@ custom:
     number: 0
 
 functions:
-  login:
-    handler: ./handler.loginWithGoogle
+  generate:
+    handler: ./handler.uploadResume
     events:
       - http:
-          path: /auth/google
-          method: get
-          # authorizer: ${self:custom.authorizer}
-          cors: ${self:custom.cors}
-  googleCallback:
-    handler: ./handler.googleCallback
-    events:
-      - http:
-          path: /auth/google/callback
-          method: get
-          # authorizer: ${self:custom.authorizer}
-          cors: ${self:custom.cors}
-  logout:
-    handler: ./handler.logout
-    events:
-      - http:
-          path: /auth/logout
-          method: get
-          # authorizer: ${self:custom.authorizer}
+          path: /resume/generate
+          method: post
+          authorizer: ${self:custom.authorizer}
           cors: ${self:custom.cors}

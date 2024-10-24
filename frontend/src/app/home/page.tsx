@@ -42,14 +42,6 @@ export default function HomePage() {
         </h1>
 
         <Form form={form} onFinish={createResumeHandler}>
-          <div className="flex justify-center items-center w-full">
-            <Button
-              className="font-title text-3xl font-medium text-center mt-10 p-5 bg-violet-900	text-white"
-              onClick={createResumeHandler}
-            >
-              Create
-            </Button>
-          </div>
           <div className="flex justify-center items-center h-full w-full mt-10">
             <div className="flex gap-x-3 ">
               <Form.Item
@@ -87,6 +79,14 @@ export default function HomePage() {
                 />
               </Form.Item>
             </div>
+          </div>
+          <div className="flex justify-center items-center w-full">
+            <Button
+              className="font-title text-3xl font-medium text-center mt-5 p-5 bg-violet-900	text-white"
+              onClick={createResumeHandler}
+            >
+              Create
+            </Button>
           </div>
         </Form>
       </div>
