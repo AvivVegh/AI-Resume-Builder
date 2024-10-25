@@ -19,11 +19,13 @@ const geistMono = localFont({
 });
 
 axios.interceptors.request.use(function (config: any) {
-  if (config.url?.includes("auth")) {
+  if (config?.url?.includes("auth")) {
     return config;
   }
 
-  const token = localStorage?.getItem("id_token");
+  const token = localStorage.getItem("id_token");
+
+  console.log("token exists", token ? "yes" : "no");
 
   if (!config) {
     config = {};
