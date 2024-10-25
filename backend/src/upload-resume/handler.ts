@@ -6,7 +6,7 @@ import { Logger } from '../lib/logger';
 import { UploadResumeService } from './upload-resume.service';
 import { HttpResponses } from '../lib/http-responses';
 
-export const paths = ['google', '/google/callback', 'logout'];
+export const paths = ['upload-resume'];
 
 export const uploadResume = handlerWrapper(async (event: APIGatewayEvent, context: Context) => {
   const logger = myContainer.resolve(Logger);

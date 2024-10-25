@@ -61,9 +61,9 @@ export const authorize: Handler = async (event: any, _context: Context, callback
       jwksUri: 'https://www.googleapis.com/oauth2/v3/certs',
     });
 
-    if (verifier && payload.oid) {
+    if (verifier && payload.sub) {
       console.log('verifier:', verifier);
-      callback(null, generateAuthResponse(payload.oid, methodArn));
+      callback(null, generateAuthResponse(payload.sub, methodArn));
     } else {
       console.error('Invalid token.  Missing ID', payload);
       callback(null, defaultDenyAllPolicy);
