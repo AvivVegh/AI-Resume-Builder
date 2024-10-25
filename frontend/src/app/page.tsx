@@ -12,10 +12,14 @@ export default function Main() {
     const accessToken = searchParams.get("access_token");
     const refreshToken = searchParams.get("refresh_token");
 
-    if (idToken && accessToken && refreshToken) {
+    if (idToken && accessToken) {
       localStorage.setItem("id_token", idToken);
       localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("refresh_token", refreshToken);
+
+      if (refreshToken) {
+        localStorage.setItem("refresh_token", refreshToken);
+      }
+
       localStorage.setItem("is_authenticated", "true");
     }
 
