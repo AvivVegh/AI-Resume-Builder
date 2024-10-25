@@ -19,6 +19,8 @@ const geistMono = localFont({
 });
 
 axios.interceptors.request.use(function (config: any) {
+  console.log("intercepting request", config);
+
   if (config?.url?.includes("auth")) {
     return config;
   }
