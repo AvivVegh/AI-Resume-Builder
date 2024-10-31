@@ -1,12 +1,9 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
 import 'reflect-metadata';
-import { parse } from 'cookie';
+
 import { myContainer } from '../../inversify.config';
 import { Database, DatabaseType } from '../database/data-source';
-import { User } from '../../types/user';
-import { getTokenPayload } from '../auth';
 import { RequestContext } from '../request-context';
-import { isValidUuid } from '../validators';
 
 export const initEnitityManager = async () => {
   const db = myContainer.get<Database>(DatabaseType);
@@ -19,13 +16,6 @@ export const setRequestContext = async (event: APIGatewayEvent, context: Context
   }
 
   const ctx: any = { awsRequestId: context.awsRequestId };
-
-  const setCookies = event.headers['Set-Cookie'];
-  if (setCookies) {
-    const cookies = parse(setCookies);
-    console.log('cookies', cookies);
-    RequestContext.getInstance().setCookies(cookies);
-  }
 
   for (const header in event.headers) {
     if (header.toLowerCase().startsWith('x-correlation-')) {
@@ -42,34 +32,23 @@ export const setRequestContext = async (event: APIGatewayEvent, context: Context
   }
 
   RequestContext.getInstance().replaceAllWith(ctx);
+
+  await setUserRequestContext(event);
 };
 
 export const setUserRequestContext = async (event: APIGatewayEvent) => {
   const ctx = RequestContext.getInstance().get();
+  const userId = event?.headers?.['x-user-id'];
 
-  if (event?.headers?.['Authorization']) {
-    const payload = getTokenPayload(event.headers['Authorization']);
-
-    let userGroups: string[] = [];
-    let department: string;
-    if (event?.headers?.['user']) {
-      const user = JSON.parse(event.headers['user']);
-      userGroups = user.groups?.split(',');
-      department = user.department;
-    }
-
-    if (isValidUuid(payload?.oid)) {
+  if (userId) {
+    if (userId) {
       ctx['user'] = {
-        id: payload.oid,
-        email: payload.unique_name,
-        groups: userGroups,
-        department: department,
-      } as User;
+        id: userId,
+      };
     }
   } else {
     ctx['user'] = {
       id: undefined,
-      email: undefined,
     };
   }
 

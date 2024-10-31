@@ -110,7 +110,15 @@ jobs:
     needs: gateway
     runs-on: ubuntu-latest
     strategy:
-      matrix: { dir: ["backend/src/auth", "backend/src/upload-resume"] }
+      matrix:
+        {
+          dir:
+            [
+              "backend/src/auth",
+              "backend/src/upload-resume",
+              "backend/src/resume-ai-procesor",
+            ],
+        }
 
     steps:
       - uses: actions/checkout@v4

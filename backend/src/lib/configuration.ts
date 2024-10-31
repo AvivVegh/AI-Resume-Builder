@@ -1,6 +1,7 @@
-import fs from 'fs';
 import { load } from 'js-yaml';
 import _ from 'lodash';
+
+import fs from 'fs';
 import path from 'path';
 
 export const getConfig = (key: string): string => {

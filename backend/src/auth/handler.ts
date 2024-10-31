@@ -1,11 +1,13 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
+
 import 'reflect-metadata';
+import { AuthService, PARAM_ACCESS_TOKEN, PARAM_IS_AUTHENTICATED, PARAM_REFRESH_TOKEN } from './auth.service';
+
 import { myContainer } from '../inversify.config';
 import { handlerWrapper } from '../lib/handler-helpers/wrapper';
 import { Logger } from '../lib/logger';
 import { RequestContext } from '../lib/request-context';
 import { getConfig } from '../lib/configuration';
-import { AuthService, COOKIE_ACCESS_TOKEN, COOKIE_IS_AUTHENTICATED, COOKIE_REFRESH_TOKEN } from './auth.service';
 import { UserService } from '../user/user.service';
 import { UserRepository, UserRepositoryType } from '../repositories/user.repository';
 
@@ -42,7 +44,6 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
   logger.debug('login started');
 
   const clientUrl = getConfig('client_url');
-  const requestContext = RequestContext.getInstance();
 
   const repository = myContainer.get<UserRepository>(UserRepositoryType);
   const userService = new UserService(repository, logger);
@@ -50,9 +51,9 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
   const authService = new AuthService(userService, logger);
 
   try {
-    const refreshToken = requestContext.getCookie(COOKIE_REFRESH_TOKEN);
-    const accessToken = requestContext.getCookie(COOKIE_ACCESS_TOKEN);
-    const isAuthenticated = requestContext.getCookie(COOKIE_IS_AUTHENTICATED);
+    const refreshToken = event.pathParameters[PARAM_REFRESH_TOKEN];
+    const accessToken = event.pathParameters[PARAM_ACCESS_TOKEN];
+    const isAuthenticated = event.pathParameters[PARAM_IS_AUTHENTICATED];
 
     if (isAuthenticated && accessToken) {
       logger.debug('login - user is authenticated');

@@ -1,7 +1,8 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
 
 import 'reflect-metadata';
-import { initEnitityManager, setRequestContext, setUserRequestContext } from './global-setters';
+
+import { initEnitityManager, setRequestContext } from './global-setters';
 
 import { myContainer } from '../../inversify.config';
 import { Logger } from '../logger';
@@ -10,7 +11,6 @@ import { IDataResponse, IErrorResponse, IFileResponse } from '../../types/http-r
 import { InterfaceFrom, toJoiObject } from '../../types/joi-util';
 import { HttpResponses } from '../http-responses';
 import { extractBody, extractParams, extractQueryParams } from '../request';
-import { serialize } from 'cookie';
 
 export type Validator = <T extends Record<string, any>>(event: APIGatewayEvent, context?: Context) => T;
 
@@ -25,7 +25,7 @@ export const responseCallback = async (response: IErrorResponse | IDataResponse 
   //   await db.closeConnections();
   // }
 
-  let headers = {
+  const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Methods': '*',
@@ -203,8 +203,6 @@ export const handlerWrapper =
   (fn: (event: APIGatewayEvent, context?: Context) => Promise<any>) =>
   async (event: APIGatewayEvent, context: Context) => {
     await setRequestContext(event, context);
-
-    // await setUserRequestContext(event);
 
     await initEnitityManager();
 

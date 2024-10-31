@@ -16,7 +16,26 @@ export default function LoginPage() {
   }, []);
 
   const onSigninClick = () => {
-    location.href = authUrl;
+    let redirectUrl = authUrl;
+    const accessToken = localStorage.getItem("access-token");
+    const refreshToken = localStorage.getItem("refresh-token");
+    const isAuth = localStorage.getItem("is-authenticated");
+
+    const queryParams = new URLSearchParams();
+    if (refreshToken) {
+      queryParams.append("refresh-token", refreshToken);
+    }
+    if (isAuth) {
+      queryParams.append("is-authenticated", isAuth);
+    }
+
+    if (accessToken) {
+      queryParams.append("access-token", accessToken);
+    }
+
+    redirectUrl += `?${queryParams.toString()}`;
+
+    location.href = redirectUrl;
   };
 
   return (

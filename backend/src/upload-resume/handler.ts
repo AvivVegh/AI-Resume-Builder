@@ -1,9 +1,11 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
+
 import 'reflect-metadata';
+import { UploadResumeService } from './upload-resume.service';
+
 import { myContainer } from '../inversify.config';
 import { handlerWrapper } from '../lib/handler-helpers/wrapper';
 import { Logger } from '../lib/logger';
-import { UploadResumeService } from './upload-resume.service';
 import { HttpResponses } from '../lib/http-responses';
 
 export const paths = ['upload-resume'];
