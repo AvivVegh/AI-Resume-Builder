@@ -8,7 +8,7 @@ export const createResume = async ({
   jobDescription: string;
   resume: string;
 }) => {
-  const result = await axios.post(`${BASE_URL}/resume/generate`, {
+  const result = await axios.post(`${BASE_URL}/ai/create-resume`, {
     jobDescription,
     resume,
   });

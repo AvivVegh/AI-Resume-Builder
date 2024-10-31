@@ -75,7 +75,7 @@ export default function HomePage() {
                   className="font-medium font-mono"
                   cols={70}
                   rows={20}
-                  placeholder="please paste your resume..."
+                  placeholder="please paste your resume,please include experience, education, projects, and skills..."
                 />
               </Form.Item>
             </div>

@@ -8,11 +8,11 @@ export class UserResumeEntity {
   @Column({ name: 'user_id' })
   userId: string;
 
-  @Column({ name: 'resume' })
+  @Column({ name: 'resume', type: 'jsonb' })
   resume: any;
 
   @Column({ name: 'job_description' })
-  jobDescription: any;
+  jobDescription: string;
 
   @Column({ default: true })
   deleted: boolean;

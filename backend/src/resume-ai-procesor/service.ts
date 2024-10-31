@@ -30,6 +30,8 @@ export class AiService {
       throw new Error('job description too long');
     }
 
+    this.logger.info('generating resume schema');
+
     const payload = {
       max_tokens: MAX_TOKENS,
       temperature: AI_TEMP,
@@ -87,6 +89,8 @@ export class AiService {
     const decodedResponseBody = new TextDecoder().decode(apiResponse.body);
 
     const responseBody = JSON.parse(decodedResponseBody);
+
+    this.logger.info(responseBody);
 
     const userResueme = {
       userId,

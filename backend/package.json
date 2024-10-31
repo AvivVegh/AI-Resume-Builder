@@ -14,7 +14,7 @@
     "lint:fix": "npm lint-only --fix",
     "fixtures": "ts-node ./fixtures.ts",
     "typeorm": "ts-node --project ./tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:run": "npm run typeorm migration:run -d ./src/lib/database/database.ts",
+    "migration:run": "npm run typeorm migration:run -- -d ./src/lib/database/database.ts",
     "migration:create": "npm run typeorm migration:create $file_name",
     "migration:revert": "npm run typeorm migration:revert",
     "migration:generate": "npm run typeorm migration:generate -d ./src/lib/database/database.ts",
