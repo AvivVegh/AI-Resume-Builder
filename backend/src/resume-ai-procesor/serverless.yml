@@ -60,7 +60,7 @@ functions:
     handler: ./handler.handler
     events:
       - http:
-          path: /resume/ai
+          path: /ai/create-resume
           method: post
           authorizer: ${self:custom.authorizer}
           cors: ${self:custom.cors}

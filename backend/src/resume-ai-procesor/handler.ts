@@ -12,7 +12,7 @@ import { UserResumeRepository, UserResumeRepositoryType } from '../repositories/
 import { RequestContext } from '../lib/request-context';
 import { User } from '../types/user';
 
-export const paths = ['/resume/ai'];
+export const paths = ['/ai/create-resume'];
 
 export const handler = handlerWrapper(async (event: APIGatewayEvent) => {
   const logger = myContainer.resolve(Logger);
