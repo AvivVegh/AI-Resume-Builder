@@ -1,4 +1,4 @@
-service: airb-auth
+service: airb-ai-resume
 frameworkVersion: '3'
 
 plugins:
@@ -56,24 +56,11 @@ custom:
     number: 0
 
 functions:
-  login:
-    handler: ./handler.loginWithGoogle
+  ai-resume:
+    handler: ./handler.handler
     events:
       - http:
-          path: /auth/google
-          method: get
-          cors: ${self:custom.cors}
-  googleCallback:
-    handler: ./handler.googleCallback
-    events:
-      - http:
-          path: /auth/google/callback
-          method: get
-          cors: ${self:custom.cors}
-  logout:
-    handler: ./handler.logout
-    events:
-      - http:
-          path: /auth/logout
-          method: get
+          path: /resume/ai
+          method: post
+          authorizer: ${self:custom.authorizer}
           cors: ${self:custom.cors}

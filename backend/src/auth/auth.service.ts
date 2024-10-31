@@ -1,15 +1,15 @@
 import axios from 'axios';
-// import { UserService } from '../user/user.service';
+
+import { TokenResultDto } from './token-result.dto';
+
 import { getConfig } from '../lib/configuration';
 import { Logger } from '../lib/logger';
-import { RequestContext } from '../lib/request-context';
-import { TokenResultDto } from './token-result.dto';
 import { UserService } from '../user/user.service';
 
-export const COOKIE_ACCESS_TOKEN = 'res-access-token';
-export const COOKIE_REFRESH_TOKEN = 'res-refresh-token';
-export const COOKIE_ID_TOKEN = 'res-id-token';
-export const COOKIE_IS_AUTHENTICATED = 'res-is-authenticated';
+export const PARAM_ACCESS_TOKEN = 'access-token';
+export const PARAM_REFRESH_TOKEN = 'refresh-token';
+export const PARAM_ID_TOKEN = 'id-token';
+export const PARAM_IS_AUTHENTICATED = 'is-authenticated';
 
 export class AuthService {
   clientBaseUrl: string;
@@ -55,11 +55,7 @@ export class AuthService {
   }
 
   logout() {
-    const context = RequestContext.getInstance();
-    context.clearCookie(COOKIE_ACCESS_TOKEN);
-    context.clearCookie(COOKIE_REFRESH_TOKEN);
-    context.clearCookie(COOKIE_ID_TOKEN);
-    context.clearCookie(COOKIE_IS_AUTHENTICATED);
+    // TOOD: implement logout
   }
 
   async gAccessToken({ code, refreshToken }: { code?: string; refreshToken?: string }): Promise<any> {
@@ -109,13 +105,6 @@ export class AuthService {
         providerType: 'google',
       });
 
-      this.saveTokensInCookie({
-        accessToken: result.data.access_token,
-        idToken: result.data.id_token,
-        refreshToken: result.data.refresh_token,
-        expiration: result.data.expires_in,
-      });
-
       this.logger.info('save tokens in cookie success');
 
       return {
@@ -127,59 +116,5 @@ export class AuthService {
       this.logger.error(e, 'get access token user token error');
       return null;
     }
-  }
-
-  saveTokensInCookie({
-    accessToken,
-    refreshToken,
-    idToken,
-    expiration,
-  }: {
-    accessToken: string;
-    refreshToken?: string;
-    idToken: string;
-    expiration: number;
-  }) {
-    const context = RequestContext.getInstance();
-    const cookieSettings = this.cookieSettings({
-      exp: expiration,
-      secure: false,
-    });
-
-    const secureCookieSettings = this.cookieSettings({
-      exp: expiration,
-      secure: true,
-    });
-
-    context.setCookie(COOKIE_IS_AUTHENTICATED, 'true', cookieSettings);
-
-    if (refreshToken) {
-      context.setCookie(
-        COOKIE_REFRESH_TOKEN,
-        refreshToken,
-        this.cookieSettings({ exp: this.tokenExpiration, secure: true })
-      );
-    }
-
-    if (idToken) {
-      context.setCookie(COOKIE_ID_TOKEN, idToken, secureCookieSettings);
-    }
-
-    context.setCookie(COOKIE_ACCESS_TOKEN, accessToken, secureCookieSettings);
-  }
-
-  cookieSettings({ secure, exp = 0 }: { exp: number; secure: boolean }) {
-    const date = new Date();
-    date.setTime(date.getTime() + exp * 1000);
-
-    return {
-      sameSite: 'none',
-      path: '/',
-      // sameSite: 'lax',
-      // expires: date,
-      // httpOnly: secure,
-      // domain: this.clientBaseUrl,
-      // secure: secure,
-    };
   }
 }

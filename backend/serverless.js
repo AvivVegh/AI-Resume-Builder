@@ -3,7 +3,11 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
 
-const functionPaths = ['./src/auth/serverless.yml', './src/upload-resume/serverless.yml'];
+const functionPaths = [
+  './src/auth/serverless.yml',
+  './src/upload-resume/serverless.yml',
+  './src/resume-ai-procesor/serverless.yml',
+];
 
 // Rewrite handler paths to make this folder the root
 const functions = functionPaths.reduce((agg, file) => {
@@ -35,14 +39,6 @@ module.exports = {
     },
     'serverless-offline': {
       httpPort: 3003,
-      // disableCookieValidation: true,
-      // corsAllowHeaders: '*',
-      // corsAllowOrigin: '*',
-      // corsAllowCredentials: true,
-      // enforceSecureCookies: false,
-      // corsDisallowCredentials: false,
-      // credentials: true,
-      // allowCredentials: true,
     },
     authorizer: {
       type: 'CUSTOM',

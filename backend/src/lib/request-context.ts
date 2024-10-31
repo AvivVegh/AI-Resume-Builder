@@ -37,24 +37,10 @@ export class RequestContext {
     }
   }
 
-  setCookies(cookies: {}): void {
-    this.context[COOKIES] = cookies;
-  }
-
   getCookie(key: string): any {
     if (!this.context[COOKIES]) {
       return null;
     }
     return this.context[COOKIES][key];
-  }
-
-  clearCookie(key: string): void {
-    if (this.context[COOKIES]) {
-      delete this.context[COOKIES][key];
-    }
-  }
-
-  getCookies(): any {
-    return this.context[COOKIES];
   }
 }
