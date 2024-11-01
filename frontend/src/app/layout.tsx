@@ -26,6 +26,7 @@ axios.interceptors.request.use(function (config: any) {
   }
 
   const token = localStorage.getItem("id_token");
+  const userId = localStorage.getItem("user_id");
 
   console.log("token exists", token ? "yes" : "no");
 
@@ -39,6 +40,10 @@ axios.interceptors.request.use(function (config: any) {
 
   if (config.headers["noCredentials"] === "true") {
     return config;
+  }
+
+  if (userId) {
+    config.headers["x-user-id"] = userId;
   }
 
   if (token) {

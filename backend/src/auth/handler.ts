@@ -6,7 +6,6 @@ import { AuthService, PARAM_ACCESS_TOKEN, PARAM_IS_AUTHENTICATED, PARAM_REFRESH_
 import { myContainer } from '../inversify.config';
 import { handlerWrapper } from '../lib/handler-helpers/wrapper';
 import { Logger } from '../lib/logger';
-import { RequestContext } from '../lib/request-context';
 import { getConfig } from '../lib/configuration';
 import { UserService } from '../user/user.service';
 import { UserRepository, UserRepositoryType } from '../repositories/user.repository';
@@ -29,7 +28,7 @@ export const googleCallback = handlerWrapper(async (event: APIGatewayEvent, cont
   const authService = new AuthService(userService, logger);
 
   const result = await authService.gAccessToken({ code, refreshToken: refresh });
-  const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}`;
+  const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}&user_id=${result.userId}`;
   logger.debug('google callback ended');
 
   return {
@@ -69,7 +68,7 @@ export const loginWithGoogle = handlerWrapper(async (event: APIGatewayEvent, con
 
       try {
         const result = await authService.gAccessToken({ refreshToken });
-        const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}`;
+        const url = `${clientUrl}?access_token=${result.accessToken}&refresh_token=${result.refreshToken}&id_token=${result.idToken}&user_id=${result.userId}`;
         return {
           statusCode: 302,
           data: url,

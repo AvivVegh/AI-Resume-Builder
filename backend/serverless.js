@@ -48,7 +48,7 @@ module.exports = {
     },
     cors: {
       origin: '*',
-      headers: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token'],
+      headers: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token', 'x-user-id'],
       allowCredentials: true,
     },
   },

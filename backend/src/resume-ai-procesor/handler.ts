@@ -2,7 +2,7 @@ import { APIGatewayEvent } from 'aws-lambda';
 
 import 'reflect-metadata';
 
-import { AiService } from './service';
+import { OpenAiService } from './open-ai-service';
 
 import { myContainer } from '../inversify.config';
 import { handlerWrapper } from '../lib/handler-helpers/wrapper';
@@ -31,9 +31,9 @@ export const handler = handlerWrapper(async (event: APIGatewayEvent) => {
 
   const repository = myContainer.get<UserResumeRepository>(UserResumeRepositoryType);
 
-  const uploadResumeService = new AiService(logger, repository);
+  const uploadResumeService = new OpenAiService(logger, repository);
 
-  const result = await uploadResumeService.generateResume({ userId: user.id, resume, jobDescription });
+  const result = await uploadResumeService.generateResume({ userId: 'user.id', resume, jobDescription });
   logger.debug('upload resume ended', result);
 
   return HttpResponses.DATA_RESPONSE(result, 0);

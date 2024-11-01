@@ -97,7 +97,7 @@ export class AuthService {
 
       const userInfo = userInfoResult.data;
 
-      await this.userService.createUser({
+      const user = await this.userService.createUser({
         email: userInfo.email,
         firstName: userInfo.given_name,
         lastName: userInfo.family_name,
@@ -111,6 +111,7 @@ export class AuthService {
         accessToken: result.data.access_token,
         idToken: result.data.id_token,
         refreshToken: result.data.refresh_token,
+        userId: user.id,
       } as TokenResultDto;
     } catch (e) {
       this.logger.error(e, 'get access token user token error');
