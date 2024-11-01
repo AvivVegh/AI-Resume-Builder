@@ -59,6 +59,7 @@ custom:
 functions:
   ai-resume:
     handler: ./handler.handler
+    timeout: 30
     events:
       - http:
           path: /ai/create-resume
