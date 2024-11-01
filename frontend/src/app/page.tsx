@@ -11,10 +11,12 @@ export default function Main() {
     const idToken = searchParams.get("id_token");
     const accessToken = searchParams.get("access_token");
     const refreshToken = searchParams.get("refresh_token");
+    const userId = searchParams.get("user_id");
 
-    if (idToken && accessToken) {
+    if (idToken && accessToken && userId) {
       localStorage.setItem("id_token", idToken);
       localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("user_id", userId);
 
       if (refreshToken) {
         localStorage.setItem("refresh_token", refreshToken);
