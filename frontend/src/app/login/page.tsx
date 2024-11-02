@@ -17,9 +17,9 @@ export default function LoginPage() {
 
   const onSigninClick = () => {
     let redirectUrl = authUrl;
-    const accessToken = localStorage.getItem("access-token");
-    const refreshToken = localStorage.getItem("refresh-token");
-    const isAuth = localStorage.getItem("is-authenticated");
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    const isAuth = localStorage.getItem("is_authenticated");
 
     const queryParams = new URLSearchParams();
     if (refreshToken) {

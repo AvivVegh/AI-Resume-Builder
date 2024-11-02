@@ -1,5 +1,3 @@
-import { decode } from 'jsonwebtoken';
-
 import { CreateUsersDto } from './dto/create-user.dto';
 
 import { Logger } from '../lib/logger';
@@ -17,18 +15,22 @@ export class UserService {
     return users;
   }
 
-  async getUser(token: string): Promise<UserEntity> {
-    const payload = decode(token);
+  async getUser(id: string): Promise<UserEntity> {
+    const user = await this.userRepository.getById({ id });
+    console.log('user', user);
+    return user;
+  }
 
-    if (!payload) {
-      this.logger.error('invalid token');
-      throw new Error('invalid token');
+  async updateUserResume({ userId, resume }: { userId: string; resume: string }): Promise<UserEntity> {
+    const user = await this.userRepository.getById({ id: userId });
+    if (!user) {
+      this.logger.info('user not found', { id: userId });
+      return null;
     }
 
-    const tokenData = JSON.parse(payload as string);
-
-    const email = tokenData['email'];
-    const user = await this.userRepository.getByEmail({ email });
+    user.resume = resume;
+    await this.userRepository.saveOne(user);
+    this.logger.info('user resume updated', { id: userId });
     return user;
   }
 

@@ -38,7 +38,7 @@ export const setRequestContext = async (event: APIGatewayEvent, context: Context
 
 export const setUserRequestContext = async (event: APIGatewayEvent) => {
   const ctx = RequestContext.getInstance().get();
-  const userId = event?.headers?.['x-user-id'];
+  const userId = event?.headers['x-user-id'];
 
   if (userId) {
     if (userId) {

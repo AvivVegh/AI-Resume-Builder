@@ -1,4 +1,4 @@
-service: airb-upload-resume
+service: airb-profile
 frameworkVersion: '3'
 
 plugins:
@@ -57,11 +57,11 @@ custom:
     number: 0
 
 functions:
-  generate:
-    handler: ./handler.uploadResume
+  get:
+    handler: ./handler.getProfile
     events:
       - http:
-          path: /resume/generate
-          method: post
+          path: /profile
+          method: get
           authorizer: ${self:custom.authorizer}
           cors: ${self:custom.cors}

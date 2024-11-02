@@ -17,6 +17,9 @@ export class UserEntity {
   @Column()
   email: string;
 
+  @Column({ name: 'resume' })
+  resume: string;
+
   @Column({ name: 'provider_id' })
   providerId: string;
 
