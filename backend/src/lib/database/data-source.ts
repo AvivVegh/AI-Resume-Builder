@@ -4,6 +4,7 @@ import { DataSource, EntityManager } from 'typeorm';
 
 import { User1728793793379 } from './migrations/1728793793379-user.migration';
 import { UserResume1730394029773 } from './migrations/1730394029773-user-resume.migration';
+import { UserAddResumeCol1730503255586 } from './migrations/1730503255586-user-add-resume-col';
 
 import { getConfig } from '../configuration';
 import * as entities from '../../entities';
@@ -61,7 +62,7 @@ export const getConnetionConfig = (): any => {
     password: dbPassword,
     database: dbDatabase,
     entities: Object.values(entities),
-    migrations: [User1728793793379, UserResume1730394029773],
+    migrations: [User1728793793379, UserResume1730394029773, UserAddResumeCol1730503255586],
     logging: true,
     synchronize: false,
     ssl: {

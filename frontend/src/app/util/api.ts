@@ -13,19 +13,12 @@ export const createResume = async ({
     resume,
   });
 
-  return result.data;
-};
-
-export const getResumeText = async () => {
-  const result = await axios.get(`${BASE_URL}/resume/text`);
-  return result.data;
+  return result.data.result;
 };
 
 export const getProfile = async () => {
-  const result = await axios.get(`${BASE_URL}/user/profile`, {
-    withCredentials: true,
-  });
-  return result.data;
+  const result = await axios.get(`${BASE_URL}/profile`);
+  return result.data.result;
 };
 
 export const authUrl = `${BASE_URL}/auth/google`;

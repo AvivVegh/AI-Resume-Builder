@@ -24,13 +24,12 @@ export class UserRepository extends DataService {
 
   async getAll() {
     const query = this.getQueryBuilder(UserEntity, 'users');
-    query.select('id').addSelect('firstName').addSelect('lastName');
+    query.select('id').addSelect('first_name').addSelect('last_name');
     return await query.getMany();
   }
 
   async getById({ id }: { id: string }) {
-    const query = this.getQueryBuilder(UserEntity, 'users');
-    query.select('id').addSelect('firstName').addSelect('lastName').where('id = :id', { id });
+    const query = this.getQueryBuilder(UserEntity, 'users').select().where('id = :id', { id });
     return await query.getOne();
   }
 

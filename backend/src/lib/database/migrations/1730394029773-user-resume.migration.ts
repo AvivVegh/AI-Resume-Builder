@@ -7,7 +7,6 @@ export class UserResume1730394029773 implements MigrationInterface {
                 "id" VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(), 
                 "user_id" varchar NOT NULL,
                 "resume" JSONB NOT NULL,
-                "job_description" TEXT NOT NULL,
                 "deleted" boolean NOT NULL DEFAULT false,
                 "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             );

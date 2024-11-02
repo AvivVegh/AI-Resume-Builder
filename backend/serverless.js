@@ -5,7 +5,7 @@ const path = require('path');
 
 const functionPaths = [
   './src/auth/serverless.yml',
-  './src/upload-resume/serverless.yml',
+  './src/profile/serverless.yml',
   './src/resume-ai-procesor/serverless.yml',
 ];
 
