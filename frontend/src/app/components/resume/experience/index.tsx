@@ -21,11 +21,23 @@ const Experience = ({
       <div className="flex-wrap">
         {experiences.map((experience, i) => {
           return (
-            <div key={i}>
-              <Typography>{experience.company}</Typography>
-              {experience.dates && <Typography>{experience.dates}</Typography>}
-              {experience.title && <Typography>{experience.title}</Typography>}
-              <Typography>{experience.jobDetails}</Typography>
+            <div key={i} className="mt-1">
+              <div className="flex flex-row items-baseline">
+                <Typography className="text-xl">
+                  {experience.company}
+                </Typography>
+                {experience.dates && (
+                  <Typography className="text-xs ml-1">
+                    {experience.dates}
+                  </Typography>
+                )}
+              </div>
+              {experience.title && (
+                <Typography className="text-l">{experience.title}</Typography>
+              )}
+              <Typography className="text-xs">
+                {experience.jobDetails}
+              </Typography>
             </div>
           );
         })}
