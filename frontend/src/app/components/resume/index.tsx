@@ -36,7 +36,7 @@ interface ResumeProps {
   };
 }
 const Resume: React.FC<ResumeProps> = (props) => {
-  const reportTemplateRef = useRef(null);
+  const reportTemplateRef = useRef<HTMLDivElement>(null);
 
   const handleGeneratePdf = () => {
     const doc = new jsPDF({
@@ -44,14 +44,16 @@ const Resume: React.FC<ResumeProps> = (props) => {
       unit: "px",
     });
 
-    doc.html(reportTemplateRef.current, {
+    if (!reportTemplateRef.current) return;
+
+    doc.html(reportTemplateRef?.current, {
       async callback(doc) {
         doc.save("document");
       },
     });
   };
 
-  const createFileName = (extension = "", ...names) => {
+  const createFileName = (extension = "", names: any) => {
     if (!extension) {
       return "";
     }
@@ -59,7 +61,7 @@ const Resume: React.FC<ResumeProps> = (props) => {
   };
 
   const downloadFile = (
-    image,
+    image: string,
     { name = "meme-shot", extension = "jpg" } = {}
   ) => {
     const a = document.createElement("a");
@@ -71,7 +73,6 @@ const Resume: React.FC<ResumeProps> = (props) => {
   const handleMemeDownload = async () => {
     if (!reportTemplateRef.current) return;
     await htmlToImage.toJpeg(reportTemplateRef.current).then(downloadFile);
-    alert("Meme saved as meme-shot.jpg");
   };
 
   return (

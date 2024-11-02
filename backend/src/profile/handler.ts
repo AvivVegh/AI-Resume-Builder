@@ -1,7 +1,6 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
 
 import 'reflect-metadata';
-import { UploadResumeService } from './profile.service';
 
 import { myContainer } from '../inversify.config';
 import { handlerWrapper } from '../lib/handler-helpers/wrapper';
@@ -26,7 +25,7 @@ export const getProfile = handlerWrapper(async (event: APIGatewayEvent, context:
   const repository = myContainer.get<UserRepository>(UserRepositoryType);
 
   const userService = new UserService(repository, logger);
-  console.log('user dvdfvsd', user);
+
   const userEntity = await userService.getUser(user.id);
 
   return HttpResponses.DATA_RESPONSE(userEntity);
