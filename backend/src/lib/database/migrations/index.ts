@@ -1,4 +1,3 @@
-// import { CreateAssetsTable1716319015965 } from './1716319015965-CreateAssetsTable'
-// import { CreateFolderTable1718380113029 } from './1718380113029-CreateFolderTable'
-
-// export const migrations = [CreateAssetsTable1716319015965, CreateFolderTable1718380113029];
+export * from './1728793793379-user.migration';
+export * from './1730394029773-user-resume.migration';
+export * from './1730503255586-user-add-resume-col';
