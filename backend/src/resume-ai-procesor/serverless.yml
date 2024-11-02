@@ -49,7 +49,7 @@ custom:
       - Authorization
       - X-Api-Key
       - X-Amz-Security-Token
-      - x-user-id
+      - X-User-Id
     allowCredentials: true
   prune:
     automatic: true
