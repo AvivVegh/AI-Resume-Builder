@@ -1,5 +1,18 @@
 # AI-Resume-Builder
 
+Unlock the power of AI to create personalized, professional resumes that highlight your unique skills, experience, and achievements. Our AI-powered resume generator is designed to streamline the resume-building process, making it easy for users to craft a standout resume tailored to their industry and career goals. With intelligent formatting, skill-based recommendations, and job-specific keyword optimization, this tool ensures every resume is crafted to captivate recruiters and pass through Applicant Tracking Systems (ATS) with ease.
+
+Whether you're an entry-level candidate or an executive, our AI resume generator adapts to your needs, showcasing your strengths in a polished and impactful way. Simply input your career details, and watch as AI assembles a tailored resume that emphasizes what matters most, giving you a competitive edge in today's job market. Get noticed, get hired—effortlessly.
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+- [Running with Docker](#running-with-docker)
+- [License](#license)
+
 ## Prerequisites
 
 - Node.js
@@ -9,50 +22,11 @@
 
 ### Backend
 
-1. Navigate to the `backend` directory:
+[Setup](./backend/README.md)
 
-   ```sh
-   cd backend
-   ```
+### Frontend
 
-2. Install the dependencies:
-
-   ```sh
-   npm install
-   ```
-
-3. Create a `config.yaml` file in the `backend/src/config` directory with the necessary configuration.
-
-4. Start the backend server:
-   ```sh
-   npm run start
-   ```
-
-### Web
-
-1. Navigate to the `web` directory:
-
-   ```sh
-   cd web
-   ```
-
-2. Install the dependencies:
-
-   ```sh
-   npm install
-   ```
-
-3. Create a `.env` file in the `web` directory with the necessary environment variables.
-
-   ```
-   NEXT_PUBLIC_GITUHB_PROJECT_URL=
-   NEXT_PUBLIC_API_URL=https://github.com/AvivVegh/AI-Resume-Builder
-   ```
-
-4. Start the web server:
-   ```sh
-   npm run dev
-   ```
+[Setup](./frontend/README.md)
 
 ## Running with Docker
 
@@ -67,14 +41,6 @@
 
 - Access the web application at `http://localhost:3000`.
 - The backend API will be available at `http://localhost:3001`.
-
-## API Endpoints
-
-### Backend
-
-- `POST /api/resume`: Create a resume.
-- `GET /api/resume/text`: Get resume text.
-- `GET /auth/google`: Google authentication.
 
 ## License
 

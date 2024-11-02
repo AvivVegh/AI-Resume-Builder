@@ -1,11 +1,12 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import Joi from 'joi';
-import _ = require('lodash');
+import { camelCase, pick } from 'lodash';
 
 import * as querystring from 'querystring';
 
-import { myContainer } from '../inversify.config';
 import { Logger } from './logger';
+
+import { myContainer } from '../inversify.config';
 
 // path params
 
@@ -26,15 +27,16 @@ export const convertPathParametersToCamelCase = (event: APIGatewayEvent) => {
 
   if (event.pathParameters) {
     for (const key of Object.keys(event.pathParameters)) {
-      pathParameters[_.camelCase(key)] = event.pathParameters[key];
+      pathParameters[camelCase(key)] = event.pathParameters[key];
     }
   }
 
   return pathParameters;
 };
+
 export const extractParams = <T = Record<string, any>>(event: APIGatewayEvent, props: string[]) => {
   const convertedPathEvent = convertPathParametersToCamelCase(event);
-  return _.pick(convertedPathEvent, props) as T;
+  return pick(convertedPathEvent, props) as T;
 };
 
 const parseVal = (desc: any, val: any) => {
@@ -74,7 +76,7 @@ export const extractQueryParams = <T>(event: APIGatewayEvent, props: Joi.ObjectS
 
   // String array is fine for cases where params are just strings
   if (Array.isArray(props)) {
-    return _.pick<T>(queryParams as any, props) as T;
+    return pick<T>(queryParams as any, props) as T;
   }
 
   const desc = props.describe().keys;
@@ -86,7 +88,7 @@ export const extractQueryParams = <T>(event: APIGatewayEvent, props: Joi.ObjectS
     {} as any
   );
 
-  return _.pick<T>(mappedObj, Object.keys(desc)) as T;
+  return pick<T>(mappedObj, Object.keys(desc)) as T;
 };
 
 export const InvalidJson = Symbol('InvalidJson');
@@ -105,7 +107,7 @@ export const extractQueryParamJson = (event: APIGatewayEvent, paramName: string)
     if (json) {
       try {
         return JSON.parse(event.queryStringParameters[paramName]);
-      } catch (e) {
+      } catch {
         logger.warn(`Invalid JSON in query param ${paramName}: ${json}`);
         return InvalidJson;
       }
@@ -151,7 +153,7 @@ export const extractBody = <T = Record<string, any>>(event: APIGatewayEvent, pro
   }
 
   const body = JSON.parse(event.body);
-  return _.pick(body, props) as T;
+  return pick(body, props) as T;
 };
 
 // TODO refactor and add tests
@@ -177,7 +179,7 @@ const convertObjectCamelCase = (object: any) => {
       // eslint-disable-next-line
       if (object.hasOwnProperty(originalKey)) {
         // newKey = (originalKey.charAt(0).toLowerCase() + originalKey.slice(1) || originalKey).toString();
-        newKey = _.camelCase(originalKey);
+        newKey = camelCase(originalKey);
         value = object[originalKey];
 
         if (value !== null && value.constructor === Object) {
@@ -217,5 +219,5 @@ export const convertHeadersToLowerCase = (event: APIGatewayEvent): any => {
 
 export const extractBodyFromFormData = (event: APIGatewayEvent, keys: string[]) => {
   const parsed = querystring.decode(event.body);
-  return _.pick(parsed, keys);
+  return pick(parsed, keys);
 };
