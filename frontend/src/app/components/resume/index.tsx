@@ -7,6 +7,7 @@ import Education from "./education";
 import PersonalInformation from "./personal-information";
 import jsPDF from "jspdf";
 import * as htmlToImage from "html-to-image";
+import { Button } from "antd";
 
 interface ResumeProps {
   resume: {
@@ -77,10 +78,6 @@ const Resume: React.FC<ResumeProps> = (props) => {
 
   return (
     <div>
-      <button className="button" onClick={handleGeneratePdf}>
-        Generate PDF
-      </button>
-
       <div
         className={"grid grid-flow-row gap-y-1 bg-white p-5 self-center"}
         ref={reportTemplateRef}
@@ -95,6 +92,15 @@ const Resume: React.FC<ResumeProps> = (props) => {
         {props.resume.education && (
           <Education educations={props.resume.education} />
         )}
+      </div>
+
+      <div className="flex w-full justify-center items-center ">
+        <Button
+          className="font-title text-3xl font-medium text-center mt-5 p-5 bg-violet-900	text-white"
+          onClick={handleGeneratePdf}
+        >
+          Generate PDF
+        </Button>
       </div>
     </div>
   );
