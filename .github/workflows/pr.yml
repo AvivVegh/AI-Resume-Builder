@@ -116,7 +116,7 @@ jobs:
           dir:
             [
               "backend/src/auth",
-              "backend/src/upload-resume",
+              "backend/src/profile",
               "backend/src/resume-ai-procesor",
             ],
         }
