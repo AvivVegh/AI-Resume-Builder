@@ -45,22 +45,25 @@ export class OpenAiService {
           role: 'user',
           content: `
           task description: 
-          the main goal is to rewrite the resume in the context of the job description.
+          the main goal is to rewrite the resume in the context.
+          Dont add details that exists in jobDescription and not exists in the resume.
+          Highlight the information from resume that match the jobDescption.          
+          Add details that are exists in the resume and not exists in the jobDescription.
           1. from the resume in the context write a summary like a human would write on himself. 
           2. from the resume in the context extract the full name.
           3. from the resume in the context extract the user job title.
           4. from the resume in the context extract the user linkedin.
           5. from the resume in the context extract the user email.
           6. from the resume in the context extract the user city.
-          7. from the resume in the context extract the skills required for the job.
+          7. from the resume in the context extract the skills if possible.
           8. from the resume in the context rewrite the user experience, rewrite job details.
           9. from the resume in the context extract the user education if possible.
           10. from the resume in the context extract the user certifications if possible.
           11. from the resume in the context rewrite the user projects if possible do not duplicate content from the experience.
-
+          
           context: 
-          1. resume: ${resume}
-          2. job description: ${jobDescription}
+          jobDescription: ${jobDescription}
+          resume: ${resume}          
           response schema:            
           {
               user: { fullName: string, title: string, linkedIn: string, email: string, city: string } 
