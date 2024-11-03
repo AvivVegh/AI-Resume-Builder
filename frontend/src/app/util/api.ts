@@ -2,18 +2,23 @@ import axios from "axios";
 import { BASE_URL } from "./constants";
 
 export const createResume = async ({
-  jobDescription,
+  jobDescription = "",
   resume,
 }: {
   jobDescription: string;
   resume: string;
 }) => {
-  const result = await axios.post(`${BASE_URL}/ai/create-resume`, {
-    jobDescription,
-    resume,
-  });
+  try {
+    const result = await axios.post(`${BASE_URL}/ai/create-resume`, {
+      jobDescription,
+      resume,
+    });
+    return result.data.result;
+  } catch (error) {
+    console.log(error);
+  }
 
-  return result.data.result;
+  return null;
 };
 
 export const getProfile = async () => {

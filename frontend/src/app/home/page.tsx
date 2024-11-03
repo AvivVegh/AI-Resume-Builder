@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Form } from "antd";
+import { Button, Form, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { createResume, getProfile } from "../util/api";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ export default function HomePage() {
   const [form] = Form.useForm();
   const [profile, setProfile] = useState<User>();
   const [resume, setResume] = useState<any>();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,15 +36,20 @@ export default function HomePage() {
   const createResumeHandler = async () => {
     const values = await form.validateFields();
 
+    setLoading(true);
+
     const result = await createResume({
       jobDescription: values.jobDescription,
       resume: values.resume,
     });
 
+    setLoading(false);
+
     if (!result) {
       console.log("Failed to create resume");
       return;
     }
+
     setResume(result);
     localStorage.setItem("resume", JSON.stringify(result));
 
@@ -71,14 +77,14 @@ export default function HomePage() {
                 name="jobDescription"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please add your job description",
                   },
                 ]}
               >
                 <TextArea
                   style={{ resize: "none" }}
-                  className="font-medium font-mono"
+                  className="font-medium font-mono focus:border-violet-900 hover:border-violet-900"
                   cols={70}
                   rows={20}
                   placeholder="please add your job description..."
@@ -96,7 +102,7 @@ export default function HomePage() {
               >
                 <TextArea
                   style={{ resize: "none" }}
-                  className="font-medium font-mono"
+                  className="font-medium font-mono focus:border-violet-900 hover:border-violet-900"
                   cols={70}
                   rows={20}
                   placeholder="please paste your resume, please include the following details: personal details (full name, linkedin, gmail, phone number, city) experience, education, projects, and skills..."
@@ -104,13 +110,17 @@ export default function HomePage() {
               </Form.Item>
             </div>
           </div>
-          <div className="flex justify-center items-center w-full">
+          <div className="relative flex justify-center items-center w-full">
             <Button
               className="font-title text-3xl font-medium text-center mt-5 p-5 bg-violet-900	text-white"
               onClick={createResumeHandler}
+              disabled={loading}
             >
               Create
             </Button>
+            <div className="absolute top-1/2">
+              <Spin spinning={loading}></Spin>
+            </div>
           </div>
           {resume && (
             <div className="flex justify-center items-center w-full">
