@@ -8,12 +8,23 @@ Whether you're an entry-level candidate or an executive, our AI resume generator
 
 ## Table of Contents
 
+- [Flow](#flow)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
   - [Backend](#backend)
   - [Frontend](#frontend)
 - [Running with Docker](#running-with-docker)
 - [License](#license)
+
+## Flow
+
+### Auth flowchart
+
+![alt text](./readme-assets/auth-flow.png)
+
+### Resume flowchart
+
+![alt text](./readme-assets/resume-flow.png)
 
 ## Prerequisites
 
